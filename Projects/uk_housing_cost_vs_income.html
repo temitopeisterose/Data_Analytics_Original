@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 5: UK Housing Costs vs Income — Hypothesis Testing & Regression</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --bg-mid: #0f172a;
+            --glass: rgba(255, 255, 255, 0.06);
+            --glass-2: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.10);
+            --text: #e6f1ff;
+            --soft: #cbd5f5;
+            --muted: #94a3b8;
+            --cyan: #22d3ee;
+            --blue: #3b82f6;
+            --pink: #ec4899;
+            --indigo: #6366f1;
+            --green: #10b981;
+            --amber: #f59e0b;
+            --teal: #14b8a6;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(34, 211, 238, 0.15), transparent 25%),
+                radial-gradient(circle at top right, rgba(236, 72, 153, 0.12), transparent 25%),
+                linear-gradient(135deg, var(--bg-dark), var(--bg-mid));
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            padding: 110px 20px 80px;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        .hero::before {
+            width: 260px;
+            height: 260px;
+            background: rgba(34, 211, 238, 0.35);
+            left: -50px;
+            top: -40px;
+        }
+
+        .hero::after {
+            width: 300px;
+            height: 300px;
+            background: rgba(236, 72, 153, 0.30);
+            right: -40px;
+            top: 10px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #bff8ff;
+            backdrop-filter: blur(12px);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 4vw, 4.1rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            max-width: 900px;
+            margin: 0 auto;
+            color: var(--soft);
+            font-size: 1.06rem;
+            line-height: 1.8;
+        }
+
+        .hero-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .hero-tag {
+            padding: 10px 15px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            color: white;
+            font-size: 14px;
+        }
+
+        .section-card {
+            max-width: 1220px;
+            margin: 24px auto;
+            padding: 34px;
+            border-radius: 28px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(18px);
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-intro {
+            color: var(--soft);
+            line-height: 1.8;
+            margin-bottom: 0;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 999px;
+            color: white;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .pill-orange {
+            background: linear-gradient(135deg, #22d3ee, #3b82f6);
+        }
+
+        .pill-purple {
+            background: linear-gradient(135deg, #6366f1, #a5b4fc);
+        }
+
+        .pill-green {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+
+        .pill-red {
+            background: linear-gradient(135deg, #ec4899, #f472b6);
+        }
+
+        .pill-blue {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+        }
+
+        .pill-gold {
+            background: linear-gradient(135deg, #f59e0b, #facc15);
+        }
+
+        .pill-teal {
+            background: linear-gradient(135deg, #14b8a6, #5eead4);
+        }
+
+        .content-box {
+            background: var(--glass-2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+            padding: 22px;
+            height: 100%;
+        }
+
+        .list-clean {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .list-clean li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 12px;
+            color: var(--soft);
+            line-height: 1.7;
+        }
+
+        .list-clean li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #67e8f9;
+            font-weight: 800;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-top: 12px;
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            border-radius: 22px;
+            padding: 22px;
+            text-align: center;
+        }
+
+        .kpi-number {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #22d3ee, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .kpi-label {
+            color: var(--soft);
+            font-size: 0.95rem;
+        }
+
+        .image-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+            height: 100%;
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 25px 60px rgba(34, 211, 238, 0.25);
+            transition: 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 25px 60px rgba(34, 211, 238, 0.25);
+        }
+
+        .image-wrap {
+            position: relative;
+            background: #0b1722;
+        }
+
+        .image-wrap img {
+            width: 100%;
+            height: 290px;
+            object-fit: cover;
+            display: block;
+            cursor: zoom-in;
+            transition: transform 0.4s ease;
+        }
+
+        .image-card:hover .image-wrap img {
+            transform: scale(1.03);
+        }
+
+        .image-tag {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: white;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+        }
+
+        .image-header {
+            padding: 14px 18px;
+            font-weight: 800;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .header-orange {
+            background: linear-gradient(135deg, #22d3ee, #3b82f6);
+        }
+
+        .header-purple {
+            background: linear-gradient(135deg, #6366f1, #a5b4fc);
+        }
+
+        .header-green {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+
+        .header-red {
+            background: linear-gradient(135deg, #ec4899, #f472b6);
+        }
+
+        .header-blue {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+        }
+
+        .header-gold {
+            background: linear-gradient(135deg, #f59e0b, #facc15);
+        }
+
+        .header-teal {
+            background: linear-gradient(135deg, #14b8a6, #5eead4);
+        }
+
+        .image-desc {
+            padding: 18px;
+            color: var(--soft);
+            line-height: 1.75;
+        }
+
+        .visual-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+            margin-bottom: 24px;
+        }
+
+        .visual-card-header {
+            padding: 16px 20px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: white;
+            background: linear-gradient(135deg, #22d3ee, #6366f1);
+        }
+
+        .visual-card-body {
+            padding: 22px;
+        }
+
+        .part-label {
+            display: inline-block;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: 800;
+            color: white;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            padding: 7px 12px;
+        }
+
+        .visual-img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 18px;
+            cursor: zoom-in;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #0a1722;
+        }
+
+        .analysis-box {
+            margin-top: 18px;
+            padding: 18px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .analysis-box h6 {
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .analysis-box p {
+            color: var(--soft);
+            line-height: 1.75;
+            margin-bottom: 10px;
+        }
+
+        .next-stage-box {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(99, 102, 241, 0.12));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 26px;
+        }
+
+        .download-box {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(16, 185, 129, 0.12));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 28px;
+            text-align: center;
+        }
+
+        .download-box h3 {
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .download-box p {
+            color: var(--soft);
+            max-width: 760px;
+            margin: 0 auto 24px;
+            line-height: 1.8;
+        }
+
+        .btn-custom,
+        .btn-back {
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 14px 24px;
+            transition: 0.25s ease;
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, #22d3ee, #6366f1);
+            color: #020617;
+        }
+
+        .btn-back {
+            margin-top: 16px;
+            background: transparent;
+            border: 2px solid #22d3ee;
+            color: #22d3ee;
+        }
+
+        .btn-custom:hover,
+        .btn-back:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-back:hover {
+            background: #22d3ee;
+            color: #020617;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 28px 20px 46px;
+            color: var(--muted);
+        }
+
+        /* Lightbox */
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.94);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        #lightbox img {
+            max-width: 92%;
+            max-height: 88%;
+            border-radius: 18px;
+            transition: transform 0.2s ease;
+            transform-origin: center center;
+        }
+
+        .lightbox-note {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #dbeef3;
+            font-size: 13px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        @media (max-width: 991px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section-card {
+                margin: 18px 14px;
+                padding: 24px;
+            }
+
+            .image-wrap img,
+            .visual-img {
+                height: 240px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 82px 16px 56px;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">PROJECT 5 • R PROGRAMMING • HOUSING ANALYTICS</div>
+            <h1>UK Housing Costs vs Income — Hypothesis Testing & Regression</h1>
+            <p>
+                This project explores the relationship between income and housing cost using R.
+                It begins with data loading, cleaning, exploration, summary analysis, and visualisation,
+                before progressing into statistical analysis including correlation and regression modelling.
+                The final stage focuses on interpreting results and applying insights to real-world housing
+                affordability decisions.
+            </p>
+
+            <div class="hero-tags">
+                <span class="hero-tag">R</span>
+                <span class="hero-tag">ggplot2</span>
+                <span class="hero-tag">dplyr</span>
+                <span class="hero-tag">readr</span>
+                <span class="hero-tag">Housing Data</span>
+                <span class="hero-tag">EDA</span>
+                <span class="hero-tag">Regression</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTRODUCTION -->
+    <section class="section-card fade-in">
+        <h2 class="section-title">📌 Project Overview</h2>
+        <p class="section-intro">
+            This project examines housing affordability by analysing housing cost, income, employment status,
+            property type, and region within a UK housing dataset. The work completed so far focuses on data
+            loading, data quality checks, cleaning, descriptive analysis, grouping, and visualisation. The findings
+            provide an exploratory foundation for the final stage, which will involve statistical testing and
+            regression.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-4">
+                <div class="content-box">
+                    <div class="pill pill-orange">What the Project Covers</div>
+                    <p class="section-intro mb-0">
+                        Data exploration, missing value checks, duplicate handling, cleaning of text fields,
+                        grouping by categories, and visualisation of patterns in housing cost and income.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="content-box">
+                    <div class="pill pill-purple">Dataset Used</div>
+                    <p class="section-intro mb-0">
+                        A UK housing income dataset containing region, employment status, property type,
+                        education, marital status, age, income, housing cost, savings, and record date.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="content-box">
+                    <div class="pill pill-green">Project Goal</div>
+                    <p class="section-intro mb-0">
+                        To understand how income relates to housing cost, identify patterns across categories,
+                        and prepare the dataset for advanced statistical testing and modelling.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KPI -->
+    <section class="section-card">
+        <h2 class="section-title">🎯 Current Project Snapshot</h2>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-number">650</div>
+                <div class="kpi-label">Initial Rows</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-number">10</div>
+                <div class="kpi-label">Variables</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-number">50</div>
+                <div class="kpi-label">Duplicates Found</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-number">3</div>
+                <div class="kpi-label">Analysis Stages Completed</div>
+
+                <div style="margin-top:10px; font-size:13px; color:#cbd5f5;">
+                    EDA • Visualisation • Modelling
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DATA LOADING / OVERVIEW -->
+    <section class="section-card">
+        <h2 class="section-title">1️⃣ Data Loading & Overview</h2>
+        <p class="section-intro">
+            The project begins by loading the necessary R libraries, importing the dataset, previewing its structure,
+            and checking the variable names and dimensions.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Setup</span>
+                        <img src="Screenshots/Project5/1. Install and Load Libraries.png"
+                            alt="Install and Load Libraries" class="zoomable">
+                    </div>
+                    <div class="image-header header-orange">Install and Load Libraries</div>
+                    <div class="image-desc">
+                        This step loads the key R libraries required for the project, including
+                        <strong>dplyr</strong>, <strong>ggplot2</strong>, and <strong>readr</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Import</span>
+                        <img src="Screenshots/Project5/2.. Import Dataset.png" alt="Load the Dataset" class="zoomable">
+                    </div>
+                    <div class="image-header header-blue">Load the Dataset</div>
+                    <div class="image-desc">
+                        The housing dataset is imported into R and stored as <code>housing_data</code>,
+                        ready for cleaning and analysis.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Preview</span>
+                        <img src="Screenshots/Project5/3. View First Six Rows.png" alt="Preview the Dataset"
+                            class="zoomable">
+                    </div>
+                    <div class="image-header header-teal">Preview the Dataset</div>
+                    <div class="image-desc">
+                        A preview of the first rows confirms that the dataset contains key fields such as region,
+                        employment status, property type, age, income, housing cost, savings, and record date.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Structure</span>
+                        <img src="Screenshots/Project5/4. Check the Dataset Structure.png" alt="Check Structure"
+                            class="zoomable">
+                    </div>
+                    <div class="image-header header-purple">Check Structure</div>
+                    <div class="image-desc">
+                        The structure output confirms variable types and shows that the dataset contains
+                        <strong>650 observations</strong> and <strong>10 variables</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Summary</span>
+                        <img src="Screenshots/Project5/5. Summary of Dataset Columns.png" alt="Summary Overview"
+                            class="zoomable">
+                    </div>
+                    <div class="image-header header-green">Summary Overview</div>
+                    <div class="image-desc">
+                        Summary statistics provide an initial understanding of the numeric and categorical variables,
+                        including the distribution of age, income, housing cost, and savings.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Metadata</span>
+                        <img src="Screenshots/Project5/6. Check Column Names.png" alt="Display Column Names"
+                            class="zoomable">
+                    </div>
+                    <div class="image-header header-red">Display Column Names</div>
+                    <div class="image-desc">
+                        Listing the column names confirms the exact variables available for analysis and helps
+                        with planning the cleaning and grouping steps.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-6">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Shape</span>
+                        <img src="Screenshots/Project5/7. Check Dataset Size.png" alt="Check Dimensions"
+                            class="zoomable">
+                    </div>
+                    <div class="image-header header-gold">Check Dimensions</div>
+                    <div class="image-desc">
+                        The dimensions output confirms the dataset size as <strong>650 rows by 10 columns</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="content-box">
+                    <div class="pill pill-blue">Early Findings</div>
+                    <ul class="list-clean">
+                        <li>The dataset contains a strong mix of demographic and financial variables.</li>
+                        <li>It is large enough for meaningful exploratory analysis and regression work.</li>
+                        <li>Several variables are suitable for comparing affordability and cost relationships.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CLEANING -->
+    <section class="section-card">
+        <h2 class="section-title">2️⃣ Data Cleaning & Quality Checks</h2>
+        <p class="section-intro">
+            Before analysis, the dataset was checked for missing values, duplicate rows, and inconsistent text
+            formatting.
+            These steps improved the reliability of the results.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-6">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Missing Values</span>
+                        <img src="Screenshots/Project5/8. Check Missing Values.png" alt="Missing Values Check"
+                            class="zoomable">
+                    </div>
+                    <div class="image-header header-purple">Missing Values Check</div>
+                    <div class="image-desc">
+                        Missing values were found in <strong>Income</strong>, <strong>HousingCost</strong>, and
+                        <strong>Savings</strong>, indicating the need for imputation before analysis.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Duplicates</span>
+                        <img src="Screenshots/Project5/9. Check for Duplicate Rows Before Removal.png"
+                            alt="Check Duplicate Rows" class="zoomable">
+                    </div>
+                    <div class="image-header header-red">Duplicate Rows Check</div>
+                    <div class="image-desc">
+                        The duplicate check identified <strong>50 duplicate records</strong>, which could distort
+                        summary
+                        statistics and visual outputs if not removed.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visual-card mt-4">
+            <div class="visual-card-header">Duplicate Removal — Before and After</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Before / Code Output</div>
+                        <img src="Screenshots/Project5/10. Remove Duplicated and Check After Removal.png"
+                            alt="Duplicate Rows Before" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">After Removing Duplicates</div>
+                        <img src="Screenshots/Project5/10. Remove Duplicated and Check After Removal.png"
+                            alt="Duplicate Rows After" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>Duplicate rows were removed successfully, reducing repeated observations and improving data
+                        quality for later analysis.</p>
+                    <h6>Key Insight</h6>
+                    <p>Removing duplicates helps ensure that charts, averages, and future regression results are not
+                        biased by repeated records.</p>
+                    <h6>Recommendation</h6>
+                    <p>Always perform duplicate checks as part of the early cleaning workflow, especially in real-world
+                        datasets where repeated entries are common.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-6">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Text Cleaning</span>
+                        <img src="Screenshots/Project5/11. Clean and Standardise Text Columns.png"
+                            alt="Standardise Text Columns" class="zoomable">
+                    </div>
+                    <div class="image-header header-teal">Standardise Text Columns</div>
+                    <div class="image-desc">
+                        Text fields such as region, property type, employment status, education, and marital status
+                        were standardised to title case and stripped of extra spaces.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Numeric Conversion</span>
+                        <img src="Screenshots/Project5/12. Convert Number Columns to Numeric.png"
+                            alt="Convert Numeric Columns Properly" class="zoomable">
+                    </div>
+                    <div class="image-header header-green">Convert Numeric Columns Properly</div>
+                    <div class="image-desc">
+                        Numeric fields such as income, housing cost, savings, and age were converted into proper
+                        numeric format to support calculations, charts, and later statistical modelling.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visual-card mt-4">
+            <div class="visual-card-header">Missing Values — Before and After Median Replacement</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Before</div>
+                        <img src="Screenshots/Project5/8. Check Missing Values.png" alt="Missing Values Before"
+                            class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">After Median Replacement</div>
+                        <img src="Screenshots/Project5/13. Replace Missing Numeric Values with the Median and Check After.png"
+                            alt="Missing Values After Replacement" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>Missing numeric values were replaced with the median, after which all tracked variables showed
+                        zero missing values.</p>
+                    <h6>Key Insight</h6>
+                    <p>Median imputation is appropriate here because it reduces the influence of extreme values and
+                        preserves the central tendency of the data.</p>
+                    <h6>Recommendation</h6>
+                    <p>Median replacement should be clearly documented in the report because it affects later
+                        interpretation of distributions and model accuracy.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-12">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Output</span>
+                        <img src="Screenshots/Project5/14. Save the Cleaned Dataset.png" alt="Save Cleaned Dataset"
+                            class="zoomable">
+                    </div>
+                    <div class="image-header header-blue">Save Cleaned Dataset</div>
+                    <div class="image-desc">
+                        The cleaned dataset was exported for further use in later analysis stages, including
+                        hypothesis testing and regression modelling.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GROUPING / AGGREGATION -->
+    <section class="section-card">
+        <h2 class="section-title">3️⃣ Grouping and Comparative Analysis</h2>
+        <p class="section-intro">
+            Grouping was used to compare average income and average housing cost across region, employment status,
+            and property type.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-6">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Grouping</span>
+                        <img src="Screenshots/Project5/15. Create a Simple Table for Region vs Average Income.png"
+                            alt="Average Income by Region Table" class="zoomable">
+                    </div>
+                    <div class="image-header header-orange">Average Income by Region</div>
+                    <div class="image-desc">
+                        Regional grouping shows that average incomes differ slightly across the UK, with the Midlands
+                        appearing highest and Scotland and South East somewhat lower.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Grouping</span>
+                        <img src="Screenshots/Project5/16. Create a Simple Table for Average House Cost by Region.png"
+                            alt="Average Housing Cost by Region Table" class="zoomable">
+                    </div>
+                    <div class="image-header header-gold">Average Housing Cost by Region</div>
+                    <div class="image-desc">
+                        Housing costs by region are relatively close, but there are still mild differences that can be
+                        explored further through visualisation.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISUALS -->
+    <section class="section-card">
+        <h2 class="section-title">4️⃣ Visualisation and Interpretation</h2>
+        <p class="section-intro">
+            The charts below present the current visual analysis. For visuals that were produced as both
+            <strong>code + chart</strong> and <strong>chart only</strong>, both versions are displayed together
+            in the same row.
+        </p>
+
+        <!-- 17 -->
+        <div class="visual-card mt-4">
+            <div class="visual-card-header">Visual 1 — Average Income by Region</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Code + Chart</div>
+                        <img src="Screenshots/Project5/17. Create a Bar Chart for Average Income by Region.png"
+                            alt="Average Income by Region Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Chart Only</div>
+                        <img src="Screenshots/Project5/17b. Bar Chart for Average Income by Region.png"
+                            alt="Average Income by Region Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>The bar chart shows that average income is fairly similar across regions, with the Midlands
+                        slightly higher and Scotland and South East slightly lower.</p>
+                    <h6>Key Insight</h6>
+                    <p>Regional differences in income exist, but they are not extreme, suggesting a relatively balanced
+                        spread of income levels across the dataset.</p>
+                    <h6>Recommendation</h6>
+                    <p>Regional affordability should be interpreted alongside housing cost rather than income alone,
+                        because small income differences may still matter when housing costs vary.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 18 -->
+        <div class="visual-card">
+            <div class="visual-card-header">Visual 2 — Average Housing Cost by Region</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Code + Chart</div>
+                        <img src="Screenshots/Project5/18. Create a Bar Chart for Average Housing Cost by Region.png"
+                            alt="Average Housing Cost by Region Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Chart Only</div>
+                        <img src="Screenshots/Project5/18b. Bar Chart for Average Housing Cost by Region.png"
+                            alt="Average Housing Cost by Region Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>The chart shows that average housing costs are relatively close across all regions, with Wales
+                        and Scotland slightly higher and North West slightly lower.</p>
+                    <h6>Key Insight</h6>
+                    <p>There is no major regional disparity in average housing cost, which suggests that regional
+                        affordability differences may depend more on income than on cost alone.</p>
+                    <h6>Recommendation</h6>
+                    <p>Future analysis should compare housing cost and income side by side to identify which regions may
+                        face stronger affordability pressure.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 19 -->
+        <div class="visual-card">
+            <div class="visual-card-header">Visual 3 — Distribution of Income</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Code + Chart</div>
+                        <img src="Screenshots/Project5/19. Create a Histogram for Income Distribution.png"
+                            alt="Income Distribution Histogram Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Chart Only</div>
+                        <img src="Screenshots/Project5/19b. Histogram for Income Distribution.png"
+                            alt="Income Distribution Histogram Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>Income is spread across a wide range, with many individuals concentrated in the middle-income
+                        bands and fewer observations at the highest levels.</p>
+                    <h6>Key Insight</h6>
+                    <p>The distribution suggests a broad middle-income population and a smaller number of higher-income
+                        earners, indicating slight right-skewness.</p>
+                    <h6>Recommendation</h6>
+                    <p>Affordability analysis should focus strongly on middle-income households, as they make up the
+                        largest portion of the dataset.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 20 -->
+        <div class="visual-card">
+            <div class="visual-card-header">Visual 4 — Distribution of Housing Cost</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Code + Chart</div>
+                        <img src="Screenshots/Project5/20. Create a Housing Cost Distribution Histogram.png"
+                            alt="Housing Cost Distribution Histogram Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Chart Only</div>
+                        <img src="Screenshots/Project5/20a. Histogram for Housing Cost Distribution.png"
+                            alt="Housing Cost Distribution Histogram Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>Housing costs are concentrated in the lower to middle ranges, with a noticeable long tail
+                        extending toward much higher values.</p>
+                    <h6>Key Insight</h6>
+                    <p>The distribution is right-skewed, which indicates that most households face moderate housing
+                        costs, while a smaller number are exposed to very high costs.</p>
+                    <h6>Recommendation</h6>
+                    <p>Any future model should account for skewness and possible outliers in housing cost, especially
+                        when performing regression analysis.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 21 -->
+        <div class="visual-card">
+            <div class="visual-card-header">Visual 5 — Housing Cost by Region (Box Plot)</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Code + Chart</div>
+                        <img src="Screenshots/Project5/21. Create a Box Plot for Housing Cost by Region.png"
+                            alt="Housing Cost by Region Box Plot Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Chart Only</div>
+                        <img src="Screenshots/Project5/21b. Box Plot for Housing Cost by Region.png"
+                            alt="Housing Cost by Region Box Plot Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>The box plot shows that median housing costs are broadly similar across regions, but some regions
+                        have more variability and more high-value outliers.</p>
+                    <h6>Key Insight</h6>
+                    <p>Regional differences are more visible in spread and extreme values than in median cost,
+                        suggesting that affordability risk may differ by variability rather than average alone.</p>
+                    <h6>Recommendation</h6>
+                    <p>Regions with more outliers should be monitored carefully, since a few expensive properties can
+                        distort averages and affect affordability measures.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 22 -->
+        <div class="visual-card">
+            <div class="visual-card-header">Visual 6 — Income vs Housing Cost (Scatter Plot)</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Code + Chart</div>
+                        <img src="Screenshots/Project5/22. Create a Scatter Plot for Income vs Housing Cost.png"
+                            alt="Income vs Housing Cost Scatter Plot Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Chart Only</div>
+                        <img src="Screenshots/Project5/22b. Scatter Plot for Income vs Housing Cost1.png"
+                            alt="Income vs Housing Cost Scatter Plot Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>The scatter plot shows a clear positive relationship between income and housing cost: as income
+                        increases, housing cost generally rises.</p>
+                    <h6>Key Insight</h6>
+                    <p>Income appears to be an important driver of housing cost, although the spread of points suggests
+                        that other factors also influence the relationship.</p>
+                    <h6>Recommendation</h6>
+                    <p>This relationship should be tested formally in the final stage using correlation analysis and
+                        regression modelling.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 23 -->
+        <div class="visual-card">
+            <div class="visual-card-header">Visual 7 — Income vs Housing Cost with Regression Line</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Code + Chart</div>
+                        <img src="Screenshots/Project5/23. Add a Regression Line to the Scatter Plot.png"
+                            alt="Income vs Housing Cost with Regression Line Code and Chart"
+                            class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Chart Only</div>
+                        <img src="Screenshots/Project5/23b. A Regression Line to the Scatter Plot.png"
+                            alt="Income vs Housing Cost with Regression Line Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>The regression line confirms a positive linear trend between income and housing cost, showing
+                        that higher income is associated with higher housing cost.</p>
+                    <h6>Key Insight</h6>
+                    <p>The chart provides visual evidence that a regression model is likely to identify a meaningful
+                        positive association between the two variables.</p>
+                    <h6>Recommendation</h6>
+                    <p>The next project stage should estimate the regression coefficients formally and test statistical
+                        significance to quantify this relationship.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 24 -->
+        <div class="visual-card">
+            <div class="visual-card-header">Visual 8 — Average Income by Employment Status</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Code + Chart</div>
+                        <img src="Screenshots/Project5/24. Compare Average Income by Employment Status.png"
+                            alt="Average Income by Employment Status Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Chart Only</div>
+                        <img src="Screenshots/Project5/24b. Bar Chart for Average Income by Employment Status.png"
+                            alt="Average Income by Employment Status Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>The chart shows only modest differences in average income by employment status, with
+                        self-employed individuals appearing slightly higher.</p>
+                    <h6>Key Insight</h6>
+                    <p>Employment status influences income, but the effect does not appear extreme in this dataset.</p>
+                    <h6>Recommendation</h6>
+                    <p>Employment status should still be considered in later modelling, as even moderate income
+                        differences may affect affordability outcomes.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 25 -->
+        <div class="visual-card">
+            <div class="visual-card-header">Visual 9 — Average Housing Cost by Property Type</div>
+            <div class="visual-card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Code + Chart</div>
+                        <img src="Screenshots/Project5/25. Compare Average Housing Cost by Property Type.png"
+                            alt="Average Housing Cost by Property Type Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Chart Only</div>
+                        <img src="Screenshots/Project5/25b. Bar Chart Showing Average Housing Cost by Property Type.png"
+                            alt="Average Housing Cost by Property Type Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+
+                <div class="analysis-box">
+                    <h6>Summary</h6>
+                    <p>The chart compares average housing cost by property type and shows visible variation, with houses
+                        generally appearing more expensive than flats.</p>
+                    <h6>Key Insight</h6>
+                    <p>Property type plays an important role in explaining housing cost and may be a useful predictor in
+                        later models.</p>
+                    <h6>Recommendation</h6>
+                    <p>Property type should be included in future hypothesis testing and regression as an explanatory
+                        variable for housing cost.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATISTICAL ANALYSIS -->
+    <section class="section-card">
+        <h2 class="section-title">5️⃣ Statistical Analysis & Regression Modelling</h2>
+        <p class="section-intro">
+            This stage extends the analysis beyond visual exploration into statistical validation.
+            The goal is to quantify the relationship between income and housing cost using
+            correlation and regression modelling.
+        </p>
+
+        <!-- KPI STATS -->
+        <div class="kpi-grid mt-4">
+            <div class="kpi-card">
+                <div class="kpi-number">53,954</div>
+                <div class="kpi-label">Mean Income (£)</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-number">24,516</div>
+                <div class="kpi-label">Mean Housing Cost (£)</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-number">0.661</div>
+                <div class="kpi-label">Correlation (r)</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-number">0.437</div>
+                <div class="kpi-label">R² (Model Fit)</div>
+            </div>
+        </div>
+
+        <!-- DESCRIPTIVE -->
+        <div class="row mt-4 g-4">
+            <div class="col-lg-6">
+                <div class="content-box">
+                    <div class="pill pill-purple">Descriptive Statistics</div>
+                    <ul class="list-clean">
+                        <li>Income shows a wide spread with a standard deviation of ~20,096.</li>
+                        <li>Housing cost has moderate variability (~12,916).</li>
+                        <li>Mean and median values are relatively close → limited skew in income.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="content-box">
+                    <div class="pill pill-blue">Correlation Analysis</div>
+                    <ul class="list-clean">
+                        <li>Correlation coefficient (r = 0.661) indicates a strong positive relationship.</li>
+                        <li>Higher income generally leads to higher housing cost.</li>
+                        <li>However, spread suggests other influencing factors exist.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- REGRESSION VISUALS -->
+        <div class="visual-card mt-4">
+            <div class="visual-card-header">Regression & Hypothesis Testing Visualisation</div>
+            <div class="visual-card-body">
+
+                <div class="row g-4">
+
+                    <!-- Regression Line -->
+                    <div class="col-lg-6">
+                        <div class="part-label">Income vs Housing Cost with Regression Line</div>
+                        <img src="Screenshots/Project5/5c2.. Scatter Plot with Regression Line Income vs Housing Cost_Plot Only.png"
+                            class="visual-img zoomable">
+
+                        <div class="analysis-box">
+                            <h6>Insight</h6>
+                            <p>
+                                The regression line confirms a positive linear relationship between income and housing
+                                cost.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Correlation Test -->
+                    <div class="col-lg-6">
+                        <div class="part-label">Correlation Significance Test</div>
+                        <img src="Screenshots/Project5/7. correlation Test of Significance Income vs Housing Cost.png"
+                            class="visual-img zoomable">
+
+                        <div class="analysis-box">
+                            <h6>Hypothesis Testing</h6>
+                            <p>
+                                The p-value is less than 0.001, meaning the relationship is statistically significant.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Regression Summary -->
+                    <div class="col-lg-6">
+                        <div class="part-label">Regression Model Summary</div>
+                        <img src="Screenshots/Project5/8. Simple Linear Regression Income vs Housing Cost.png"
+                            class="visual-img zoomable">
+
+                        <div class="analysis-box">
+                            <h6>Model Interpretation</h6>
+                            <p>
+                                The model explains 43.7% of the variation in housing cost (R² = 0.437).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Predicted vs Actual -->
+                    <div class="col-lg-6">
+                        <div class="part-label">Predicted vs Actual Housing Cost</div>
+                        <img src="Screenshots/Project5/9. Regression with Multiple Predictors.png"
+                            class="visual-img zoomable">
+
+                        <div class="analysis-box">
+                            <h6>Model Performance</h6>
+                            <p>
+                                The model shows a strong linear trend but some variation suggests other influencing
+                                factors.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- OVERALL INSIGHTS -->
+    <section class="section-card">
+        <h2 class="section-title">6️⃣ Final Insights & Data-Driven Recommendations</h2>
+        <div class="row g-4">
+
+            <!-- INSIGHTS -->
+            <div class="col-lg-6">
+                <div class="content-box">
+                    <div class="pill pill-purple">Key Insights</div>
+                    <ul class="list-clean">
+                        <li>Income has a statistically significant positive relationship with housing cost.</li>
+                        <li>The Correlation (r = 0.661) confirms a strong linear association between the two variables.
+                        </li>
+                        <li>The regression model explains approximately 43.7% of housing cost variation (R² = 0.437).
+                        </li>
+                        <li>Housing cost distribution is right-skewed, indicating the presence of high-cost outliers.
+                        </li>
+                        <li>Regional differences exist but are relatively small compared to income influence.</li>
+                        <li>Property type and employment status contribute additional variation beyond income.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- RECOMMENDATIONS -->
+            <div class="col-lg-6">
+                <div class="content-box">
+                    <div class="pill pill-orange">Data-Driven Recommendations</div>
+                    <ul class="list-clean">
+                        <li>Incorporate additional predictors (region, property type, savings) to improve model
+                            accuracy.
+                        </li>
+                        <li>Use multiple regression to better capture real-world housing affordability factors.</li>
+                        <li>Monitor and handle outliers carefully to avoid distortion in model performance.</li>
+                        <li>Combine statistical findings with domain knowledge when making housing-related decisions.
+                        </li>
+                        <li>Use insights to inform affordability analysis, policy discussions, and financial planning.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BUSINESS IMPACT -->
+    <section class="section-card">
+        <h2 class="section-title">💼 Business Impact & Real-World Value</h2>
+
+        <div class="content-box">
+            <ul class="list-clean">
+                <li>This analysis helps identify key drivers of housing affordability.</li>
+                <li>Insights can support financial planning for individuals and households.</li>
+                <li>Findings can inform policy discussions around housing and income inequality.</li>
+                <li>Regression modelling provides a data-driven foundation for predicting housing costs.</li>
+                <li>Supports decision-making for lenders, investors, and housing authorities.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- FINAL STAGE / EXTENSIONS -->
+    <section class="section-card">
+        <div class="next-stage-box">
+            <h2 class="section-title">🚀 7️⃣ Final Stage & Future Enhancements</h2>
+
+            <p class="section-intro">
+                This project has now progressed from exploratory data analysis into statistical modelling.
+                The relationship between income and housing cost has been validated using correlation
+                and regression analysis. The focus now shifts towards improving model performance,
+                expanding the analysis, and applying the findings to real-world decision-making.
+            </p>
+
+            <div class="row mt-4 g-4">
+
+                <div class="col-md-4">
+                    <div class="content-box">
+                        <div class="pill pill-blue">Model Improvement</div>
+                        <p>
+                            A multiple regression model was implemented by adding additional predictors
+                            (e.g., Age and Savings). This improves the model’s ability to explain housing cost
+                            compared to using income alone, demonstrating that housing affordability is influenced
+                            by multiple factors rather than a single variable.
+                        </p>
+
+                        <h6>Next Step</h6>
+                        <p>
+                            Further improvements could include adding categorical variables such as region,
+                            property type, and employment status to capture real-world housing market complexity.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="content-box">
+                        <div class="pill pill-green">Advanced Modelling</div>
+                        <p class="section-intro mb-0">
+                            Explore multiple regression models and compare performance using R-squared and residual
+                            analysis.
+                            This allows a deeper understanding of how different factors jointly influence housing
+                            affordability.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="content-box">
+                        <div class="pill pill-red">Real-World Application</div>
+                        <p class="section-intro mb-0">
+                            Apply findings to real-world scenarios such as housing affordability assessments,
+                            policy recommendations, and financial planning insights for individuals and organisations.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- DOWNLOAD -->
+    <section class="section-card">
+        <div class="download-box">
+            <h3>📁 Project Outputs & Datasets</h3>
+
+            <p>
+                Download the full data pipeline used in this project, including the original messy dataset,
+                the cleaned dataset, and the regression dataset with predicted values generated from the model.
+            </p>
+
+            <!-- MESSY DATASET -->
+            <a href="datasets/uk_housing_income_raw.csv" class="btn-custom" download>
+                🧹 Download Original Dataset (Raw)
+            </a>
+
+            <br><br>
+
+            <!-- CLEANED DATASET -->
+            <a href="datasets/uk_housing_income_cleaned.csv" class="btn-custom" download>
+                ⬇ Download Cleaned Dataset
+            </a>
+
+            <br><br>
+
+            <!-- REGRESSION DATASET -->
+            <a href="datasets/uk_housing_income_with_predictions.csv" class="btn-custom" download>
+                📊 Download Regression Dataset (Actual vs Predicted)
+            </a>
+
+            <br><br>
+
+            <!-- CORRELATION -->
+            <a href="datasets/correlation_results.csv" class="btn-custom" download>
+                📈 Download Correlation Results
+            </a>
+
+            <br>
+
+            <a href="../index.html" class="btn-back">
+                ← Back to Portfolio
+            </a>
+        </div>
+    </section>
+
+    <div class="footer">
+        Project 5 • UK Housing Costs vs Income — Hypothesis Testing & Regression
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox">
+        <img id="lightbox-img" src="" alt="Zoomed image">
+        <div class="lightbox-note">Click anywhere to close • Use mouse wheel to zoom</div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let scale = 1;
+            const lightbox = document.getElementById("lightbox");
+            const lightboxImg = document.getElementById("lightbox-img");
+            const zoomables = document.querySelectorAll(".zoomable");
+
+            zoomables.forEach(img => {
+                img.addEventListener("click", function () {
+                    lightbox.style.display = "flex";
+                    lightboxImg.src = this.src;
+                    scale = 1;
+                    lightboxImg.style.transform = "scale(1)";
+                });
+            });
+
+            lightbox.addEventListener("click", function () {
+                lightbox.style.display = "none";
+            });
+
+            lightboxImg.addEventListener("wheel", function (e) {
+                e.preventDefault();
+
+                if (e.deltaY < 0) {
+                    scale += 0.1;
+                } else {
+                    scale -= 0.1;
+                }
+
+                if (scale < 1) scale = 1;
+                if (scale > 3) scale = 3;
+
+                lightboxImg.style.transform = `scale(${scale})`;
+            });
+        });
+    </script>
+
+    <script>
+        const faders = document.querySelectorAll(".fade-in");
+
+        const appearOptions = {
+            threshold: 0.2
+        };
+
+        const appearOnScroll = new IntersectionObserver(function (entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add("show");
+                observer.unobserve(entry.target);
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+    </script>
+</body>
+
+</html>

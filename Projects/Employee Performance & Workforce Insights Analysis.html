@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 4: Employee Performance & Workforce Insights Analysis</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-1: #061822;
+            --bg-2: #0b2c39;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-2: rgba(255, 255, 255, 0.06);
+            --border: rgba(255, 255, 255, 0.12);
+            --text: #ffffff;
+            --soft: #d7edf2;
+            --muted: #a9c9d1;
+            --accent: #ff7a1a;
+            --accent-2: #17c0eb;
+            --accent-3: #7ed6df;
+            --accent-4: #22c55e;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(255, 122, 26, 0.13), transparent 20%),
+                radial-gradient(circle at top right, rgba(23, 192, 235, 0.14), transparent 22%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            color: var(--text);
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 100px 20px 70px;
+            text-align: center;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        .hero::before {
+            width: 260px;
+            height: 260px;
+            background: rgba(255, 122, 26, 0.32);
+            top: -60px;
+            left: -30px;
+        }
+
+        .hero::after {
+            width: 320px;
+            height: 320px;
+            background: rgba(23, 192, 235, 0.22);
+            top: 10px;
+            right: -60px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.09);
+            color: var(--accent);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            border-radius: 999px;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            margin-bottom: 22px;
+            backdrop-filter: blur(12px);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 4vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            max-width: 900px;
+            margin: 0 auto;
+            color: var(--soft);
+            font-size: 1.06rem;
+            line-height: 1.8;
+        }
+
+        .hero-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .hero-tag {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            font-size: 14px;
+        }
+
+        .section-card {
+            max-width: 1200px;
+            margin: 26px auto;
+            padding: 34px;
+            border-radius: 28px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(18px);
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-intro {
+            color: var(--soft);
+            line-height: 1.8;
+            margin-bottom: 0;
+        }
+
+        .subheading {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .content-box {
+            background: var(--glass-2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+            padding: 22px;
+            height: 100%;
+        }
+
+        .highlight-list,
+        .objective-list,
+        .insight-list {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .highlight-list li,
+        .objective-list li,
+        .insight-list li {
+            position: relative;
+            padding-left: 26px;
+            margin-bottom: 12px;
+            line-height: 1.7;
+            color: var(--soft);
+        }
+
+        .highlight-list li::before,
+        .objective-list li::before,
+        .insight-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-top: 10px;
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            border-radius: 22px;
+            padding: 22px;
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .kpi-number {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .kpi-label {
+            color: var(--soft);
+            font-size: 0.95rem;
+        }
+
+        .section-pill {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 999px;
+            margin-bottom: 14px;
+        }
+
+        .pill-orange {
+            background: linear-gradient(135deg, #ff7a1a, #ff9f43);
+        }
+
+        .pill-blue {
+            background: linear-gradient(135deg, #0ea5e9, #17c0eb);
+        }
+
+        .pill-green {
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+        }
+
+        .pill-purple {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        }
+
+        .pill-red {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+        }
+
+        .pill-cyan {
+            background: linear-gradient(135deg, #06b6d4, #22d3ee);
+        }
+
+        .image-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+            transition: 0.3s ease;
+            height: 100%;
+        }
+
+        .image-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .image-wrap {
+            position: relative;
+            background: #0b1822;
+            overflow: hidden;
+        }
+
+        .image-wrap img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+            cursor: zoom-in;
+            transition: transform 0.4s ease;
+        }
+
+        .image-card:hover .image-wrap img {
+            transform: scale(1.03);
+        }
+
+        .image-tag {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: white;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+        }
+
+        .image-header {
+            padding: 14px 18px;
+            font-weight: 800;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .header-orange {
+            background: linear-gradient(135deg, #ff7a1a, #ff9f43);
+        }
+
+        .header-blue {
+            background: linear-gradient(135deg, #0ea5e9, #17c0eb);
+        }
+
+        .header-green {
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+        }
+
+        .header-purple {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        }
+
+        .header-red {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+        }
+
+        .header-cyan {
+            background: linear-gradient(135deg, #06b6d4, #22d3ee);
+        }
+
+        .image-desc {
+            padding: 18px;
+            color: var(--soft);
+            line-height: 1.75;
+        }
+
+        .split-visual-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+            margin-bottom: 24px;
+        }
+
+        .split-visual-header {
+            padding: 16px 20px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: white;
+            background: linear-gradient(135deg, #ff7a1a, #17c0eb);
+        }
+
+        .split-visual-body {
+            padding: 22px;
+        }
+
+        .part-label {
+            display: inline-block;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: 800;
+            color: white;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            padding: 7px 12px;
+        }
+
+        .visual-img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 18px;
+            cursor: zoom-in;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #0a1722;
+        }
+
+        .visual-desc {
+            color: var(--soft);
+            line-height: 1.8;
+            margin-top: 16px;
+        }
+
+        .section-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.10);
+            margin: 22px 0;
+        }
+
+        .download-box {
+            background: linear-gradient(135deg, rgba(255, 122, 26, 0.16), rgba(23, 192, 235, 0.15));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 28px;
+            text-align: center;
+        }
+
+        .download-box h3 {
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .download-box p {
+            color: var(--soft);
+            max-width: 760px;
+            margin: 0 auto 24px;
+            line-height: 1.8;
+        }
+
+        .btn-download,
+        .btn-back {
+            display: inline-block;
+            border: none;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 14px 24px;
+            transition: 0.25s ease;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #ff7a1a, #ff9f43);
+            color: #09131a;
+        }
+
+        .btn-back {
+            margin-top: 16px;
+            background: transparent;
+            border: 2px solid #22d3ee;
+            color: #22d3ee;
+        }
+
+        .btn-download:hover,
+        .btn-back:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-back:hover {
+            background: #22d3ee;
+            color: #061822;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 28px 20px 46px;
+            color: var(--muted);
+        }
+
+        /* Lightbox */
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.94);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        #lightbox img {
+            max-width: 92%;
+            max-height: 88%;
+            border-radius: 18px;
+            transition: transform 0.2s ease;
+            transform-origin: center center;
+            cursor: zoom-in;
+        }
+
+        .lightbox-note {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #dbeef3;
+            font-size: 13px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        @media (max-width: 991px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .visual-img,
+            .image-wrap img {
+                height: 240px;
+            }
+
+            .section-card {
+                margin: 18px 14px;
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 82px 16px 56px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">PROJECT 4 • PYTHON HR ANALYTICS</div>
+            <h1>Employee Performance & Workforce Insights Analysis</h1>
+            <p>
+                This project focuses on analysing employee performance and workforce data using Python.
+                It demonstrates how a data analyst explores, cleans, analyses, and visualises workforce data
+                to uncover meaningful insights that can support business decision-making.
+            </p>
+
+            <div class="hero-tags">
+                <span class="hero-tag">Python</span>
+                <span class="hero-tag">Pandas</span>
+                <span class="hero-tag">Matplotlib</span>
+                <span class="hero-tag">Seaborn</span>
+                <span class="hero-tag">HR Dataset</span>
+                <span class="hero-tag">Data Cleaning</span>
+                <span class="hero-tag">Visual Analytics</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTRODUCTION -->
+    <section class="section-card">
+        <h2 class="section-title">📌 Introduction</h2>
+        <p class="section-intro">
+            This project uses a realistic Human Resources dataset that contains employee-level information such as
+            salary, performance scores, attendance rates, departments, job roles, education, and join dates.
+            The dataset is intentionally noisy, containing missing values, duplicates, and inconsistent text
+            formatting to reflect real-world data conditions.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-4">
+                <div class="content-box">
+                    <div class="section-pill pill-orange">What the Project Is</div>
+                    <p class="section-intro mb-0">
+                        A Python-based workforce analytics project that demonstrates data loading, cleaning,
+                        summarisation, grouping, visualisation, and insight generation.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="content-box">
+                    <div class="section-pill pill-blue">What Dataset Is Used</div>
+                    <p class="section-intro mb-0">
+                        A realistic HR dataset containing employee information such as salary, performance,
+                        attendance, department, job role, education, and join dates.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="content-box">
+                    <div class="section-pill pill-green">What the Goal Is</div>
+                    <p class="section-intro mb-0">
+                        To clean the dataset, analyse workforce patterns, create visualisations, and generate
+                        insights that can support business decision-making.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OBJECTIVES / KPI -->
+    <section class="section-card">
+        <h2 class="section-title">🎯 Project Objectives</h2>
+
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <ul class="objective-list">
+                    <li>Load and inspect the HR dataset in Python.</li>
+                    <li>Identify missing values, duplicates, and inconsistent text formatting.</li>
+                    <li>Clean and standardise the dataset for reliable analysis.</li>
+                    <li>Generate descriptive statistics for key numeric variables.</li>
+                    <li>Perform grouping and aggregation by department and gender.</li>
+                    <li>Create visualisations that reveal workforce patterns and trends.</li>
+                    <li>Summarise findings to support evidence-based decision-making.</li>
+                </ul>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-number">370</div>
+                        <div class="kpi-label">Rows Before Cleaning</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-number">350</div>
+                        <div class="kpi-label">Rows After Cleaning</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-number">10</div>
+                        <div class="kpi-label">Columns Analysed</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-number">6</div>
+                        <div class="kpi-label">Departments Identified</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1 TITLE / DATA LOAD -->
+    <section class="section-card">
+        <h2 class="section-title">1️⃣ Title & Data Load</h2>
+        <p class="section-intro">
+            The project begins by importing the required Python libraries and loading the noisy HR dataset into a
+            pandas DataFrame for analysis.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-6">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Data Load</span>
+                        <img src="Screenshots/Project4/1. Data Load.png" alt="Data Load" class="zoomable">
+                    </div>
+                    <div class="image-header header-orange">Data Import and Preview</div>
+                    <div class="image-desc">
+                        This step imports pandas, matplotlib, and seaborn, then reads the HR dataset into Python.
+                        The initial preview helps confirm that the dataset has been loaded correctly.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="content-box">
+                    <div class="section-pill pill-orange">Section Summary</div>
+                    <ul class="highlight-list">
+                        <li>Core Python libraries were imported successfully.</li>
+                        <li>The dataset was loaded from CSV format into a pandas DataFrame.</li>
+                        <li>An initial preview was used to inspect the structure and sample records.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2 & 3 -->
+    <section class="section-card">
+        <h2 class="section-title">2️⃣ Introduction & 3️⃣ Dataset Overview</h2>
+        <p class="section-intro">
+            This stage focuses on understanding the structure of the HR dataset before any cleaning is applied.
+            It confirms the total number of rows, columns, data types, and available fields.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Overview</span>
+                        <img src="Screenshots/Project4/2. Data Structure and Summary.png"
+                            alt="Data Structure and Summary" class="zoomable">
+                    </div>
+                    <div class="image-header header-blue">Data Structure and Summary</div>
+                    <div class="image-desc">
+                        The <code>data.info()</code> output shows the dataset shape, data types, and non-null counts.
+                        This is useful for identifying columns affected by missing values.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Overview</span>
+                        <img src="Screenshots/Project4/3. Display Column Names.png" alt="Display Column Names"
+                            class="zoomable">
+                    </div>
+                    <div class="image-header header-blue">Column Names Review</div>
+                    <div class="image-desc">
+                        Displaying all column names confirms the available variables for analysis, including
+                        EmployeeID, Salary, PerformanceScore, AttendanceRate, Department, and JoinDate.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Overview</span>
+                        <img src="Screenshots/Project4/7a. Count Data before Duplicate.png"
+                            alt="Count Data Before Duplicate Removal" class="zoomable">
+                    </div>
+                    <div class="image-header header-blue">Row Count Before Cleaning</div>
+                    <div class="image-desc">
+                        The dataset initially contains <strong>370 rows</strong>, which provides a baseline before
+                        duplicate removal and further cleaning steps are applied.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4 CLEANING -->
+    <section class="section-card">
+        <h2 class="section-title">4️⃣ Data Cleaning</h2>
+        <p class="section-intro">
+            This section addresses key data quality issues: missing values, duplicates, and inconsistent text
+            formatting. These steps improve reliability and prepare the dataset for meaningful analysis.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Cleaning</span>
+                        <img src="Screenshots/Project4/4. Missing Values Before Cleaning.png"
+                            alt="Missing Values Before Cleaning" class="zoomable">
+                    </div>
+                    <div class="image-header header-green">Missing Values Before Cleaning</div>
+                    <div class="image-desc">
+                        Missing values were identified before cleaning. The output shows that
+                        <strong>PerformanceScore</strong> and <strong>AttendanceRate</strong> contained null values.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Cleaning</span>
+                        <img src="Screenshots/Project4/5. Text Cleaning - Standardisation.png"
+                            alt="Text Cleaning Standardisation" class="zoomable">
+                    </div>
+                    <div class="image-header header-green">Text Cleaning and Standardisation</div>
+                    <div class="image-desc">
+                        Department values were cleaned using string methods to remove extra spaces and convert entries
+                        into title case, ensuring consistent categorical values.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Cleaning</span>
+                        <img src="Screenshots/Project4/6. Handling Missing Values - Replace.png"
+                            alt="Handling Missing Values Replace" class="zoomable">
+                    </div>
+                    <div class="image-header header-green">Handling Missing Values</div>
+                    <div class="image-desc">
+                        Missing performance scores were replaced using the column mean. This preserves the dataset size
+                        while supporting continued analysis of workforce performance patterns.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Cleaning</span>
+                        <img src="Screenshots/Project4/7b. Removing Duplicates and Check After.png"
+                            alt="Removing Duplicates and Check After" class="zoomable">
+                    </div>
+                    <div class="image-header header-green">Duplicate Removal</div>
+                    <div class="image-desc">
+                        Duplicate records were removed from the dataset. After cleaning, the row count reduced from
+                        <strong>370 to 350</strong>, indicating that duplicate entries were present.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Cleaning</span>
+                        <img src="Screenshots/Project4/8. Cleaned Dataset Check after Duplicates Removal.png"
+                            alt="Cleaned Dataset Check After Duplicates Removal" class="zoomable">
+                    </div>
+                    <div class="image-header header-green">Cleaned Dataset Check</div>
+                    <div class="image-desc">
+                        The post-cleaning structure confirms that the final dataset contains <strong>350 non-null
+                            rows</strong>
+                        across all columns, showing that missing values and duplicates were resolved successfully.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5 DESCRIPTIVE -->
+    <section class="section-card">
+        <h2 class="section-title">5️⃣ Descriptive Statistics</h2>
+        <p class="section-intro">
+            Descriptive statistics provide a summary of the numeric variables in the HR dataset, including age,
+            salary, performance score, and attendance rate.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-7">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Descriptive Statistics</span>
+                        <img src="Screenshots/Project4/9. Desciptive  - Summary Statistics.png"
+                            alt="Descriptive Summary Statistics" class="zoomable">
+                    </div>
+                    <div class="image-header header-purple">Summary Statistics</div>
+                    <div class="image-desc">
+                        The descriptive statistics show that the average employee age is approximately
+                        <strong>41 years</strong>, average salary is around <strong>58,957</strong>,
+                        average performance score is <strong>3.05</strong>, and average attendance rate is
+                        approximately <strong>81.21%</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="content-box">
+                    <div class="section-pill pill-purple">Key Summary Points</div>
+                    <ul class="highlight-list">
+                        <li>Average employee age is around 41 years.</li>
+                        <li>Average salary is close to 59,000.</li>
+                        <li>Average performance score is slightly above 3.</li>
+                        <li>Attendance rate averages just above 81%.</li>
+                        <li>The spread in salary suggests a broad pay range across employees.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6 GROUPING -->
+    <section class="section-card">
+        <h2 class="section-title">6️⃣ Analysis: Grouping and Aggregation</h2>
+        <p class="section-intro">
+            Grouping and aggregation were used to compare departments in terms of average salary,
+            average performance, and employee counts.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Aggregation</span>
+                        <img src="Screenshots/Project4/10. Average Salary by Department.png"
+                            alt="Average Salary by Department Table" class="zoomable">
+                    </div>
+                    <div class="image-header header-red">Average Salary by Department</div>
+                    <div class="image-desc">
+                        Department-level salary averages were calculated to compare pay differences across functional
+                        areas. Operations recorded the highest average salary among the departments shown.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Aggregation</span>
+                        <img src="Screenshots/Project4/11. Average Perfornamnce by Department.png"
+                            alt="Average Performance by Department Table" class="zoomable">
+                    </div>
+                    <div class="image-header header-red">Average Performance by Department</div>
+                    <div class="image-desc">
+                        Department-level performance averages show variation across the organisation, with Sales and
+                        Marketing performing relatively strongly compared with some other departments.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="image-card">
+                    <div class="image-wrap">
+                        <span class="image-tag">Aggregation</span>
+                        <img src="Screenshots/Project4/12. Employee count by Department.png"
+                            alt="Employee Count by Department Table" class="zoomable">
+                    </div>
+                    <div class="image-header header-red">Employee Count by Department</div>
+                    <div class="image-desc">
+                        Employee counts reveal how the workforce is distributed across the business. Operations has the
+                        largest headcount, while Finance has the smallest among the listed departments.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7 VISUALISATION -->
+    <section class="section-card">
+        <h2 class="section-title">7️⃣ Visualisation</h2>
+        <p class="section-intro">
+            Each visualisation below is presented in two parts:
+            <strong>Part A</strong> shows the Jupyter Notebook code together with the generated chart,
+            while <strong>Part B</strong> presents the chart on its own for clean reporting and presentation.
+        </p>
+
+        <!-- 13 -->
+        <div class="split-visual-card mt-4">
+            <div class="split-visual-header">Visual 1 — Average Salary by Department</div>
+            <div class="split-visual-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Part A — Code + Chart</div>
+                        <img src="Screenshots/Project4/13. Bar Chart  Salary by Department.png"
+                            alt="Average Salary by Department Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Part B — Chart Only</div>
+                        <img src="Screenshots/Project4/13b. Salary by Dept Bar Chart.png"
+                            alt="Average Salary by Department Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+                <p class="visual-desc">
+                    This bar chart compares the average salary across departments. Operations has the highest average
+                    salary, while Sales and Marketing sit slightly lower, showing that salary levels vary modestly
+                    between functional units.
+                </p>
+            </div>
+        </div>
+
+        <!-- 14 -->
+        <div class="split-visual-card">
+            <div class="split-visual-header">Visual 2 — Average Performance Score by Department</div>
+            <div class="split-visual-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Part A — Code + Chart</div>
+                        <img src="Screenshots/Project4/14. Performance By Department Bar.png"
+                            alt="Average Performance by Department Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Part B — Chart Only</div>
+                        <img src="Screenshots/Project4/14b. Performance by Department Bar Chart.png"
+                            alt="Average Performance by Department Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+                <p class="visual-desc">
+                    This chart shows average department performance scores. Sales records the strongest average
+                    performance, while Finance is slightly lower, suggesting some performance variation across teams.
+                </p>
+            </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="split-visual-card">
+            <div class="split-visual-header">Visual 3 — Salary Distribution Histogram</div>
+            <div class="split-visual-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Part A — Code + Chart</div>
+                        <img src="Screenshots/Project4/15. Salary Distribution Histogram.png"
+                            alt="Salary Distribution Histogram Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Part B — Chart Only</div>
+                        <img src="Screenshots/Project4/15b. Salary Distibution Histogram.png"
+                            alt="Salary Distribution Histogram Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+                <p class="visual-desc">
+                    The salary histogram shows that employee salaries are spread across a broad range, from
+                    approximately 20,000 to 90,000. This indicates a workforce with different salary bands and levels
+                    of seniority.
+                </p>
+            </div>
+        </div>
+
+        <!-- 16 -->
+        <div class="split-visual-card">
+            <div class="split-visual-header">Visual 4 — Salary Spread and Outlier Box Plot</div>
+            <div class="split-visual-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Part A — Code + Chart</div>
+                        <img src="Screenshots/Project4/16. Salart Spread and Outlier Box Plot.png"
+                            alt="Salary Spread and Outlier Box Plot Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Part B — Chart Only</div>
+                        <img src="Screenshots/Project4/16b. Salart Spread and Outlier Box Plot.png"
+                            alt="Salary Spread and Outlier Box Plot Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+                <p class="visual-desc">
+                    The box plot highlights the central salary range and spread. The distribution appears wide, but
+                    there are no strong isolated outliers shown beyond the whiskers in this visual.
+                </p>
+            </div>
+        </div>
+
+        <!-- 17 -->
+        <div class="split-visual-card">
+            <div class="split-visual-header">Visual 5 — Hiring Trend Over Time</div>
+            <div class="split-visual-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Part A — Code + Chart</div>
+                        <img src="Screenshots/Project4/17. Hiring Trend Over Time Line Chart.png"
+                            alt="Hiring Trend Over Time Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Part B — Chart Only</div>
+                        <img src="Screenshots/Project4/17b. Hiring Trend Over Time Line Chart.png"
+                            alt="Hiring Trend Over Time Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+                <p class="visual-desc">
+                    The line chart shows hiring activity over time. Most dates record one hire, with occasional peaks
+                    of two or three hires, indicating uneven recruitment activity across the timeline.
+                </p>
+            </div>
+        </div>
+
+        <!-- 18 -->
+        <div class="split-visual-card">
+            <div class="split-visual-header">Visual 6 — Correlation Matrix Heatmap</div>
+            <div class="split-visual-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Part A — Code + Chart</div>
+                        <img src="Screenshots/Project4/18. Correlation Matrix HeatMap.png"
+                            alt="Correlation Matrix Heatmap Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Part B — Chart Only</div>
+                        <img src="Screenshots/Project4/18b. Correlation Matrix HeatMap.png"
+                            alt="Correlation Matrix Heatmap Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+                <p class="visual-desc">
+                    The correlation matrix shows weak relationships between the numeric variables in this dataset.
+                    Performance score has a slight negative relationship with attendance rate, while age and salary
+                    show only a very weak positive relationship.
+                </p>
+            </div>
+        </div>
+
+        <!-- 19 -->
+        <div class="split-visual-card">
+            <div class="split-visual-header">Visual 7 — Grouped Bar Chart: Performance Score by Department and Gender
+            </div>
+            <div class="split-visual-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="part-label">Part A — Code + Chart</div>
+                        <img src="Screenshots/Project4/19. Grouped Bar Chart Multi Category - Performance Score by Department + Gender.png"
+                            alt="Performance by Department and Gender Code and Chart" class="visual-img zoomable">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="part-label">Part B — Chart Only</div>
+                        <img src="Screenshots/Project4/19b. Grouped Bar Chart Multi Category - Performance Score by Department + Gender.png"
+                            alt="Performance by Department and Gender Chart Only" class="visual-img zoomable">
+                    </div>
+                </div>
+                <p class="visual-desc">
+                    This grouped bar chart compares average performance scores by department and gender. Female
+                    employees show slightly higher performance in most departments, while male employees perform more
+                    strongly in Marketing.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8 INSIGHTS -->
+    <section class="section-card">
+        <h2 class="section-title">8️⃣ Insights</h2>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="content-box">
+                    <div class="section-pill pill-cyan">Workforce and Department Insights</div>
+                    <ul class="insight-list">
+                        <li>Operations has the highest employee count and the highest average salary.</li>
+                        <li>Sales records the highest average performance score among departments.</li>
+                        <li>Finance shows relatively lower average performance compared with Sales and Marketing.</li>
+                        <li>The workforce is distributed across six departments, with some areas carrying more staff
+                            than others.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="content-box">
+                    <div class="section-pill pill-cyan">Salary, Hiring, and Relationships</div>
+                    <ul class="insight-list">
+                        <li>Salaries are broadly distributed, indicating multiple pay bands across the organisation.
+                        </li>
+                        <li>The box plot suggests a wide salary spread without extreme isolated outliers.</li>
+                        <li>Hiring activity fluctuates over time, with occasional peaks rather than a steady upward
+                            trend.</li>
+                        <li>Correlation between the numeric variables is weak, meaning strong linear relationships are
+                            not evident in this dataset.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9 CONCLUSION -->
+    <section class="section-card">
+        <h2 class="section-title">9️⃣ Conclusion</h2>
+        <p class="section-intro">
+            This project demonstrates a complete Python-based workforce analytics workflow, beginning with noisy HR
+            data and progressing through data cleaning, descriptive analysis, aggregation, and visualisation.
+            The final analysis highlights useful workforce insights related to salaries, performance, hiring patterns,
+            and departmental differences.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-6">
+                <div class="content-box">
+                    <div class="section-pill pill-orange">What This Project Demonstrates</div>
+                    <ul class="highlight-list">
+                        <li>Practical data cleaning using pandas.</li>
+                        <li>Exploratory analysis of workforce data.</li>
+                        <li>Use of aggregation to compare departments and categories.</li>
+                        <li>Creation of visualisations for insight communication.</li>
+                        <li>Ability to transform raw data into evidence-based findings.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="content-box">
+                    <div class="section-pill pill-blue">Final Outcome</div>
+                    <p class="section-intro mb-0">
+                        The cleaned dataset and analytical outputs provide a reliable foundation for workforce
+                        reporting,
+                        future HR dashboard development, and more advanced people analytics work.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section class="section-card">
+        <div class="download-box">
+            <h3>📁 Final Output</h3>
+            <p>
+                Download the cleaned output dataset used as the final result of this project.
+                This file reflects the completed cleaning process, including missing value handling,
+                duplicate removal, and text standardisation.
+            </p>
+
+            <a href="datasets and files/hr_dataset_project4_cleaned.csv" class="btn-download" download>
+                ⬇ Download Cleaned Dataset
+            </a>
+
+            <br>
+
+            <a href="../index.html" class="btn-back">
+                Back to Portfolio
+            </a>
+        </div>
+    </section>
+
+    <div class="footer">
+        Project 4 • Employee Performance & Workforce Insights Analysis
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox">
+        <img id="lightbox-img" src="" alt="Zoomed image">
+        <div class="lightbox-note">Click anywhere to close • Use mouse wheel to zoom</div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let scale = 1;
+            const lightbox = document.getElementById("lightbox");
+            const lightboxImg = document.getElementById("lightbox-img");
+            const zoomables = document.querySelectorAll(".zoomable");
+
+            zoomables.forEach(img => {
+                img.addEventListener("click", function () {
+                    lightbox.style.display = "flex";
+                    lightboxImg.src = this.src;
+                    scale = 1;
+                    lightboxImg.style.transform = "scale(1)";
+                });
+            });
+
+            lightbox.addEventListener("click", function () {
+                lightbox.style.display = "none";
+            });
+
+            lightboxImg.addEventListener("wheel", function (e) {
+                e.preventDefault();
+
+                if (e.deltaY < 0) {
+                    scale += 0.1;
+                } else {
+                    scale -= 0.1;
+                }
+
+                if (scale < 1) scale = 1;
+                if (scale > 3) scale = 3;
+
+                lightboxImg.style.transform = `scale(${scale})`;
+            });
+        });
+    </script>
+
+</body>
+
+</html>

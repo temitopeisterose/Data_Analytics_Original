@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 3: ETL Data Integration Pipeline</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #07111f;
+            --bg-dark-2: #0b1728;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --text-soft: #cbd5e1;
+            --text-muted: #94a3b8;
+            --white: #ffffff;
+            --cyan: #22d3ee;
+            --blue: #38bdf8;
+            --violet: #8b5cf6;
+            --pink: #ec4899;
+            --green: #10b981;
+            --yellow: #f59e0b;
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 28%),
+                radial-gradient(circle at top right, rgba(139, 92, 246, 0.15), transparent 25%),
+                linear-gradient(135deg, var(--bg-dark), var(--bg-dark-2));
+            color: var(--white);
+            min-height: 100vh;
+        }
+
+        .hero {
+            position: relative;
+            padding: 100px 20px 70px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.55;
+            z-index: 0;
+        }
+
+        .hero::before {
+            width: 280px;
+            height: 280px;
+            background: rgba(34, 211, 238, 0.18);
+            top: -60px;
+            left: -40px;
+        }
+
+        .hero::after {
+            width: 300px;
+            height: 300px;
+            background: rgba(139, 92, 246, 0.16);
+            right: -50px;
+            top: 10px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--cyan);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(12px);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 4vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+        }
+
+        .hero p {
+            max-width: 900px;
+            margin: 0 auto;
+            color: var(--text-soft);
+            font-size: 1.08rem;
+            line-height: 1.8;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 28px;
+        }
+
+        .hero-tag {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            color: var(--white);
+            font-size: 14px;
+        }
+
+        .section-card {
+            max-width: 1200px;
+            margin: 28px auto;
+            padding: 34px;
+            border-radius: 28px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(18px);
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-subtitle {
+            color: var(--text-soft);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 0;
+        }
+
+        .pipeline-wrap {
+            margin-top: 26px;
+        }
+
+        .pipeline {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .pipeline-step {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 22px;
+            padding: 22px;
+            transition: 0.3s ease;
+            height: 100%;
+        }
+
+        .pipeline-step:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .step-badge {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .extract-badge {
+            background: linear-gradient(135deg, var(--cyan), var(--blue));
+        }
+
+        .transform-badge {
+            background: linear-gradient(135deg, var(--violet), var(--pink));
+        }
+
+        .load-badge {
+            background: linear-gradient(135deg, var(--green), var(--cyan));
+        }
+
+        .pipeline-step h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .pipeline-step p {
+            color: var(--text-soft);
+            margin-bottom: 0;
+            line-height: 1.7;
+        }
+
+        .workflow-list,
+        .tools-list,
+        .highlights-list {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .workflow-list li,
+        .tools-list li,
+        .highlights-list li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+            color: var(--text-soft);
+            line-height: 1.7;
+        }
+
+        .workflow-list li::before,
+        .tools-list li::before,
+        .highlights-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 22px;
+            padding: 24px;
+            text-align: center;
+            height: 100%;
+            transition: 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--cyan), var(--violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .metric-label {
+            color: var(--text-soft);
+            font-size: 0.95rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .filter-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 11px 20px;
+            font-weight: 700;
+            color: white;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.25s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--cyan), var(--violet));
+            transform: translateY(-2px);
+        }
+
+        .gallery-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+            transition: 0.35s ease;
+            height: 100%;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
+        }
+
+        .gallery-image-wrap {
+            position: relative;
+            overflow: hidden;
+            background: #0f172a;
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            cursor: zoom-in;
+            transition: transform 0.45s ease;
+            display: block;
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .image-tag {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .gallery-header {
+            padding: 16px 18px;
+            font-weight: 800;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .header-extract {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.95), rgba(56, 189, 248, 0.95));
+        }
+
+        .header-transform {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.95), rgba(236, 72, 153, 0.95));
+        }
+
+        .header-load {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(34, 211, 238, 0.95));
+        }
+
+        .gallery-desc {
+            padding: 18px;
+            color: var(--text-soft);
+            line-height: 1.75;
+            min-height: 118px;
+        }
+
+        .info-pill {
+            display: inline-block;
+            padding: 7px 12px;
+            font-size: 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-soft);
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .final-output-box {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.12), rgba(139, 92, 246, 0.14));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 26px;
+        }
+
+        .final-output-box h4 {
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .final-output-box p {
+            color: var(--text-soft);
+            margin-bottom: 18px;
+            line-height: 1.8;
+        }
+
+        .btn-custom,
+        .btn-download {
+            border: none;
+            border-radius: 999px;
+            padding: 13px 24px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.25s ease;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--cyan), var(--blue));
+            color: #04111f;
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, var(--violet), var(--pink));
+            color: white;
+        }
+
+        .btn-download:hover,
+        .btn-custom:hover {
+            transform: translateY(-3px);
+            opacity: 0.95;
+            color: white;
+        }
+
+        .btn-download:hover {
+            color: #04111f;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px 60px;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            margin-top: 18px;
+        }
+
+        .modal-content {
+            background: rgba(6, 12, 22, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .modal-body {
+            text-align: center;
+            padding: 18px;
+            overflow: hidden;
+        }
+
+        #modalImage {
+            max-width: 100%;
+            max-height: 78vh;
+            transition: transform 0.2s ease;
+            transform-origin: center center;
+            cursor: grab;
+            border-radius: 16px;
+        }
+
+        .small-note {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 991px) {
+            .pipeline {
+                grid-template-columns: 1fr;
+            }
+
+            .section-card {
+                padding: 24px;
+                margin: 20px 14px;
+            }
+
+            .gallery-card img {
+                height: 230px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">ETL FOR DATA ANALYSTS</div>
+            <h1>ETL Data Integration Pipeline</h1>
+            <p>
+                This project demonstrates a complete ETL workflow using <strong>Microsoft Excel</strong> and
+                <strong>Power Query</strong>, where multiple datasets were extracted, cleaned, transformed,
+                validated, and combined into a single high-quality dataset ready for analysis and reporting.
+            </p>
+
+            <div class="hero-tags">
+                <span class="hero-tag">Microsoft Excel</span>
+                <span class="hero-tag">Power Query</span>
+                <span class="hero-tag">Orders Dataset</span>
+                <span class="hero-tag">Customers Dataset</span>
+                <span class="hero-tag">Products Dataset</span>
+                <span class="hero-tag">Data Cleaning</span>
+                <span class="hero-tag">Data Integration</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECT OVERVIEW -->
+    <section class="section-card">
+        <h2 class="section-title">📌 Project Overview</h2>
+        <p class="section-subtitle">
+            In this project, I designed and implemented an ETL data integration pipeline to support reporting and
+            analysis. Data was
+            collected from multiple structured sources (<strong>Orders</strong>, <strong>Customers</strong>, and
+            <strong>Products</strong>), cleaned, transformed, and combined to
+            produce a reliable, analysis-ready dataset using Microsoft Excel and Power Query.
+        </p>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-7">
+                <h4 class="mb-3" style="font-weight: 700;">🎯 Project Objectives</h4>
+                <ul class="workflow-list">
+                    <li>Extract data from multiple structured datasets into Power Query.</li>
+                    <li>Clean and standardise values to improve consistency and usability.</li>
+                    <li>Handle missing values and incomplete records appropriately.</li>
+                    <li>Combine related datasets using key-based merge operations.</li>
+                    <li>Create transformation logic such as custom calculations for reporting.</li>
+                    <li>Apply data quality checks to validate accuracy and completeness.</li>
+                    <li>Load a final clean and merged dataset for analysis and dashboarding.</li>
+                </ul>
+            </div>
+
+            <div class="col-lg-5">
+                <h4 class="mb-3" style="font-weight: 700;">🧰 Tools & Dataset</h4>
+                <ul class="tools-list">
+                    <li><strong>Tool:</strong> Microsoft Excel</li>
+                    <li><strong>Transformation Tool:</strong> Power Query</li>
+                    <li><strong>Datasets Used:</strong> Orders, Customers, Products</li>
+                    <li><strong>Project Theme:</strong> ETL for Data Analysts</li>
+                    <li><strong>Output File:</strong> Week7_ETL_Workbook_Merged.xlsx</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- PIPELINE -->
+    <section class="section-card">
+        <h2 class="section-title">🔁 ETL Pipeline Workflow</h2>
+        <p class="section-subtitle">
+            The project followed the standard ETL structure of <strong>Extract</strong>, <strong>Transform</strong>,
+            and <strong>Load</strong>, tailored to a practical analyst workflow in Excel.
+        </p>
+
+        <div class="pipeline-wrap">
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <div class="step-badge extract-badge">1</div>
+                    <h4>Extract</h4>
+                    <p>
+                        Imported the Orders, Customers, and Products datasets into Power Query as separate queries,
+                        preparing them for transformation and integration.
+                    </p>
+                </div>
+
+                <div class="pipeline-step">
+                    <div class="step-badge transform-badge">2</div>
+                    <h4>Transform</h4>
+                    <p>
+                        Cleaned missing values, adjusted formats, created a custom Total Sales calculation, and applied
+                        merge logic to combine related records across the datasets.
+                    </p>
+                </div>
+
+                <div class="pipeline-step">
+                    <div class="step-badge load-badge">3</div>
+                    <h4>Load</h4>
+                    <p>
+                        Loaded the final validated merged table into Excel as a structured dataset ready for reporting,
+                        analysis, and business intelligence tasks.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- METRICS -->
+    <section class="section-card">
+        <h2 class="section-title">📊 Project Highlights</h2>
+
+        <div class="row g-4 mt-1">
+            <div class="col-md-4">
+                <div class="metric-card">
+                    <div class="metric-number" data-target="3">0</div>
+                    <div class="metric-label">Source Datasets Integrated</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="metric-card">
+                    <div class="metric-number" data-target="7">0</div>
+                    <div class="metric-label">Key ETL Stages Captured</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="metric-card">
+                    <div class="metric-number" data-target="1">0</div>
+                    <div class="metric-label">Final Clean Merged Output</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 g-4">
+            <div class="col-lg-12">
+                <h4 class="mb-3" style="font-weight: 700;">✨ Key Skills Demonstrated</h4>
+                <ul class="highlights-list">
+                    <li>Multi-source data extraction using Power Query.</li>
+                    <li>Data cleaning and transformation within an Excel-based workflow.</li>
+                    <li>Handling missing values and improving data completeness.</li>
+                    <li>Using custom columns to derive useful business metrics.</li>
+                    <li>Merging and expanding related tables accurately.</li>
+                    <li>Performing data quality checks before final loading.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FILTER + GALLERY -->
+    <section class="section-card">
+        <h2 class="section-title">🖼 ETL Process Screenshots</h2>
+        <p class="section-subtitle">
+            The screenshots below document the key stages of the ETL workflow, from importing source queries to
+            cleaning, merging, transforming, and loading the final dataset.
+        </p>
+
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterCards('all', event)">Show All</button>
+            <button class="filter-btn" onclick="filterCards('extract', event)">Extract</button>
+            <button class="filter-btn" onclick="filterCards('transform', event)">Transform</button>
+            <button class="filter-btn" onclick="filterCards('load', event)">Load</button>
+        </div>
+
+        <div class="row mt-4 g-4" id="galleryGrid">
+
+            <div class="col-md-6 col-lg-4 filter-item extract">
+                <div class="gallery-card">
+                    <div class="gallery-image-wrap">
+                        <span class="image-tag">Extract</span>
+                        <img src="Screenshots/Project3/Three_Imported_Queries.png" alt="Three Imported Queries"
+                            onclick="openModal(this)">
+                    </div>
+                    <div class="gallery-header header-extract">Three Imported Queries</div>
+                    <div class="gallery-desc">
+                        Initial extraction stage showing the three source datasets loaded into Power Query as separate
+                        queries: Orders, Customers, and Products.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 filter-item transform">
+                <div class="gallery-card">
+                    <div class="gallery-image-wrap">
+                        <span class="image-tag">Transform</span>
+                        <img src="Screenshots/Project3/Handling Missing Values.png" alt="Handling Missing Values"
+                            onclick="openModal(this)">
+                    </div>
+                    <div class="gallery-header header-transform">Handling Missing Values</div>
+                    <div class="gallery-desc">
+                        Demonstrates the cleaning phase where incomplete or null values were identified and handled to
+                        improve the overall quality and reliability of the dataset.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 filter-item transform">
+                <div class="gallery-card">
+                    <div class="gallery-image-wrap">
+                        <span class="image-tag">Transform</span>
+                        <img src="Screenshots/Project3/TotalSales_Custom_Column.png" alt="Total Sales Custom Column"
+                            onclick="openModal(this)">
+                    </div>
+                    <div class="gallery-header header-transform">Total Sales Custom Column</div>
+                    <div class="gallery-desc">
+                        Shows the creation of a calculated custom column in Power Query to derive Total Sales and enrich
+                        the dataset with a useful business metric.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 filter-item transform">
+                <div class="gallery-card">
+                    <div class="gallery-image-wrap">
+                        <span class="image-tag">Transform</span>
+                        <img src="Screenshots/Project3/Merged_Process.png" alt="Merged Process"
+                            onclick="openModal(this)">
+                    </div>
+                    <div class="gallery-header header-transform">Merged Process for Order and Customer Tables</div>
+                    <div class="gallery-desc">
+                        First merge step in which related datasets were combined using shared keys to enrich the Orders
+                        table with additional customer information.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 filter-item transform">
+                <div class="gallery-card">
+                    <div class="gallery-image-wrap">
+                        <span class="image-tag">Transform</span>
+                        <img src="Screenshots/Project3/Merged ProcessnProduct and Order.png" alt="Merged Process 2"
+                            onclick="openModal(this)">
+                    </div>
+                    <div class="gallery-header header-transform">Merged Process 2</div>
+                    <div class="gallery-desc">
+                        Further integration step showing continued combination and expansion of related fields (Product
+                        and Order) to
+                        produce
+                        a more complete and analysis-ready structure.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 filter-item transform">
+                <div class="gallery-card">
+                    <div class="gallery-image-wrap">
+                        <span class="image-tag">Transform</span>
+                        <img src="Screenshots/Project3/Merged_product.png" alt="Merged Product"
+                            onclick="openModal(this)">
+                    </div>
+                    <div class="gallery-header header-transform">Merged Product</div>
+                    <div class="gallery-desc">
+                        Product-level merge operation used to bring product attributes into the integrated table and
+                        ensure all relevant fields were aligned for reporting.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 filter-item load">
+                <div class="gallery-card">
+                    <div class="gallery-image-wrap">
+                        <span class="image-tag">Load</span>
+                        <img src="Screenshots/Project3/Final_Loaded_Clean_Table.png" alt="Final Loaded Clean Table"
+                            onclick="openModal(this)">
+                    </div>
+                    <div class="gallery-header header-load">Final Loaded Clean Table</div>
+                    <div class="gallery-desc">
+                        Final output of the ETL process: a cleaned, merged, and validated dataset loaded back into Excel
+                        for downstream analysis, reporting, or dashboard development.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ETL SUMMARY -->
+    <section class="section-card">
+        <h2 class="section-title">🧠 ETL Summary</h2>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <p class="section-subtitle">
+                    This project demonstrates how Excel and Power Query can be used to build a practical ETL pipeline
+                    for analysts without needing a full enterprise data engineering stack. It shows a strong
+                    understanding of <strong>data preparation</strong>, <strong>integration logic</strong>,
+                    <strong>transformation steps</strong>, and <strong>quality assurance</strong> before analysis.
+                </p>
+
+                <div class="mt-4">
+                    <span class="info-pill">Data Extraction</span>
+                    <span class="info-pill">Cleaning & Standardisation</span>
+                    <span class="info-pill">Missing Value Handling</span>
+                    <span class="info-pill">Table Merging</span>
+                    <span class="info-pill">Custom Columns</span>
+                    <span class="info-pill">Data Quality Checks</span>
+                    <span class="info-pill">Analysis-Ready Output</span>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="final-output-box">
+                    <h4>📁 Final Deliverable</h4>
+                    <p>
+                        Clean merged Excel workbook produced as the final ETL output:
+                        <strong>Week7_ETL_Workbook_Merged.xlsx</strong>
+                    </p>
+
+                    <a href="datasets and files/Week7_ETL_Workbook_Merged.xlsx" class="btn-download" download>
+                        Download Final Dataset
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <a href="../index.html" class="btn-custom">Back to Portfolio</a>
+        <p>Project 3 • ETL Data Integration Pipeline • Excel & Power Query</p>
+    </div>
+
+    <!-- IMAGE MODAL -->
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Zoomed Screenshot">
+                    <div class="small-note">Use your mouse wheel to zoom in or out.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Filter cards
+        function filterCards(category, event) {
+            const items = document.querySelectorAll('.filter-item');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Animated counters
+        const counters = document.querySelectorAll('.metric-number');
+
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            let current = 0;
+            const increment = Math.max(1, Math.ceil(target / 40));
+
+            const updateCounter = () => {
+                current += increment;
+                if (current >= target) {
+                    counter.textContent = target;
+                } else {
+                    counter.textContent = current;
+                    requestAnimationFrame(updateCounter);
+                }
+            };
+
+            updateCounter();
+        });
+
+        // Modal zoom
+        let currentScale = 1;
+        const modalElement = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+
+        function openModal(img) {
+            modalImage.src = img.src;
+            currentScale = 1;
+            modalImage.style.transform = `scale(${currentScale})`;
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        }
+
+        modalImage.addEventListener('wheel', function (e) {
+            e.preventDefault();
+
+            if (e.deltaY < 0) {
+                currentScale += 0.1;
+            } else {
+                currentScale -= 0.1;
+            }
+
+            if (currentScale < 1) currentScale = 1;
+            if (currentScale > 4) currentScale = 4;
+
+            modalImage.style.transform = `scale(${currentScale})`;
+        });
+
+        modalElement.addEventListener('hidden.bs.modal', function () {
+            currentScale = 1;
+            modalImage.style.transform = 'scale(1)';
+            modalImage.src = '';
+        });
+    </script>
+
+</body>
+
+</html>

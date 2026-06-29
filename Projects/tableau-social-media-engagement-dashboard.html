@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Social Media Engagement Analytics Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #07111f;
+            color: #eaf4ff;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 40px 24px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0b1f35, #12395c);
+            padding: 50px;
+            border-radius: 28px;
+            margin-bottom: 40px;
+            border: 1px solid #21486a;
+        }
+
+        header h1 {
+            font-size: 42px;
+            color: #7dd3fc;
+            margin-bottom: 20px;
+        }
+
+        header p {
+            font-size: 18px;
+            color: #c7d8ea;
+            max-width: 1000px;
+        }
+
+        h2 {
+            font-size: 30px;
+            margin: 50px 0 25px;
+            color: #7dd3fc;
+            border-left: 6px solid #38bdf8;
+            padding-left: 15px;
+        }
+
+        .section {
+            background: #0b1828;
+            border: 1px solid #1f3b57;
+            border-radius: 28px;
+            padding: 35px;
+            margin-bottom: 45px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+            gap: 32px;
+            align-items: stretch;
+        }
+
+        .image-grid.three {
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        }
+
+        .card {
+            background: #07111f;
+            border: 1px solid #244760;
+            border-radius: 24px;
+            overflow: hidden;
+            transition: 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: #38bdf8;
+            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: #ffffff;
+            cursor: zoom-in;
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #0c2a43;
+            color: #b7ecff;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #f0f9ff;
+        }
+
+        .card p {
+            color: #c9d7e8;
+            font-size: 16px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .insights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .insight-box {
+            background: #07111f;
+            border: 1px solid #244760;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .insight-box h3 {
+            color: #7dd3fc;
+            margin-bottom: 12px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .btn {
+            text-decoration: none;
+            background: #38bdf8;
+            color: #06111f;
+            padding: 15px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #7dd3fc;
+            transform: translateY(-3px);
+        }
+
+        footer {
+            text-align: center;
+            color: #9fb4c8;
+            margin-top: 60px;
+            font-size: 14px;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 12px;
+            background: white;
+        }
+
+        .lightbox:target {
+            display: flex;
+        }
+
+        .close {
+            position: fixed;
+            top: 25px;
+            right: 35px;
+            color: white;
+            font-size: 42px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                padding: 30px;
+            }
+
+            header h1 {
+                font-size: 30px;
+            }
+
+            .image-grid,
+            .image-grid.three {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* =====================================================
+   FINAL VISUAL LAYOUT UPDATE
+   - Images fill card thumbnail area neatly
+   - Descriptions stay underneath
+   - 3-card rows = 4/4/4
+   - 2-card rows = 6/6
+   - 1-card rows = 12/12 full width
+   - Final dashboard is large and fills the hero card
+   ===================================================== */
+
+        .image-grid,
+        .image-grid.three {
+            display: grid !important;
+            grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+            gap: 30px !important;
+            align-items: stretch !important;
+        }
+
+        .image-grid .card,
+        .image-grid.three .card {
+            grid-column: span 4 !important;
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+
+        .image-grid .card.full-width,
+        .image-grid.three .card.full-width {
+            grid-column: 1 / -1 !important;
+        }
+
+        .image-grid .card:nth-last-child(2):nth-child(3n + 1),
+        .image-grid .card:nth-last-child(1):nth-child(3n + 2),
+        .image-grid.three .card:nth-last-child(2):nth-child(3n + 1),
+        .image-grid.three .card:nth-last-child(1):nth-child(3n + 2) {
+            grid-column: span 6 !important;
+        }
+
+        .image-grid .card:last-child:nth-child(3n + 1),
+        .image-grid.three .card:last-child:nth-child(3n + 1) {
+            grid-column: 1 / -1 !important;
+        }
+
+        .card {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100% !important;
+            overflow: hidden !important;
+        }
+
+        .card-image {
+            width: 100% !important;
+            height: 300px !important;
+            background: #ffffff !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            overflow: hidden !important;
+        }
+
+        .card-image img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+            object-position: center center !important;
+            display: block !important;
+            background: #ffffff !important;
+        }
+
+        .card-content {
+            padding: 24px !important;
+            flex: 1 !important;
+        }
+
+        .dashboard-card .card-image {
+            height: 720px !important;
+            max-height: 78vh !important;
+            padding: 12px !important;
+            background: #ffffff !important;
+        }
+
+        .dashboard-card .card-image img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+            object-position: center center !important;
+        }
+
+        .summary-grid {
+            display: grid !important;
+            grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+            gap: 24px !important;
+        }
+
+        .summary-grid .summary-card {
+            grid-column: span 4 !important;
+        }
+
+        .summary-grid .summary-card:nth-last-child(2):nth-child(3n + 1),
+        .summary-grid .summary-card:nth-last-child(1):nth-child(3n + 2) {
+            grid-column: span 6 !important;
+        }
+
+        .summary-grid .summary-card:last-child:nth-child(3n + 1) {
+            grid-column: 1 / -1 !important;
+        }
+
+        .insights,
+        .recommendations {
+            display: grid !important;
+            grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+            gap: 24px !important;
+        }
+
+        .insight-box,
+        .recommendation-box {
+            grid-column: span 4 !important;
+        }
+
+        .insight-box:nth-last-child(2):nth-child(3n + 1),
+        .insight-box:nth-last-child(1):nth-child(3n + 2),
+        .recommendation-box:nth-last-child(2):nth-child(3n + 1),
+        .recommendation-box:nth-last-child(1):nth-child(3n + 2) {
+            grid-column: span 6 !important;
+        }
+
+        .insight-box:last-child:nth-child(3n + 1),
+        .recommendation-box:last-child:nth-child(3n + 1) {
+            grid-column: 1 / -1 !important;
+        }
+
+        @media (max-width: 1150px) {
+
+            .image-grid .card,
+            .image-grid.three .card,
+            .image-grid .card:nth-last-child(2):nth-child(3n + 1),
+            .image-grid .card:nth-last-child(1):nth-child(3n + 2),
+            .image-grid.three .card:nth-last-child(2):nth-child(3n + 1),
+            .image-grid.three .card:nth-last-child(1):nth-child(3n + 2),
+            .summary-grid .summary-card,
+            .summary-grid .summary-card:nth-last-child(2):nth-child(3n + 1),
+            .summary-grid .summary-card:nth-last-child(1):nth-child(3n + 2),
+            .insight-box,
+            .recommendation-box,
+            .insight-box:nth-last-child(2):nth-child(3n + 1),
+            .insight-box:nth-last-child(1):nth-child(3n + 2),
+            .recommendation-box:nth-last-child(2):nth-child(3n + 1),
+            .recommendation-box:nth-last-child(1):nth-child(3n + 2) {
+                grid-column: span 6 !important;
+            }
+
+            .image-grid .card:last-child:nth-child(2n + 1),
+            .image-grid.three .card:last-child:nth-child(2n + 1),
+            .summary-grid .summary-card:last-child:nth-child(2n + 1),
+            .insight-box:last-child:nth-child(2n + 1),
+            .recommendation-box:last-child:nth-child(2n + 1) {
+                grid-column: 1 / -1 !important;
+            }
+
+            .card-image {
+                height: 280px !important;
+            }
+
+            .dashboard-card .card-image {
+                height: 560px !important;
+            }
+        }
+
+        @media (max-width: 760px) {
+
+            .image-grid,
+            .image-grid.three,
+            .summary-grid,
+            .insights,
+            .recommendations {
+                grid-template-columns: 1fr !important;
+            }
+
+            .image-grid .card,
+            .image-grid.three .card,
+            .image-grid .card.full-width,
+            .image-grid.three .card.full-width,
+            .summary-grid .summary-card,
+            .insight-box,
+            .recommendation-box {
+                grid-column: auto !important;
+            }
+
+            .card-image {
+                height: 230px !important;
+            }
+
+            .dashboard-card .card-image {
+                height: auto !important;
+                max-height: none !important;
+                padding: 0 !important;
+            }
+
+            .dashboard-card .card-image img {
+                height: auto !important;
+            }
+        }
+
+
+        /* =====================================================
+   FINAL CARD IMAGE AND INSIGHT POLISH
+   Image names/links are unchanged.
+   Non-dashboard images now have equal height and width.
+   Descriptions remain under images.
+   ===================================================== */
+
+        .image-grid,
+        .image-grid.three {
+            display: grid !important;
+            grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+            gap: 30px !important;
+            align-items: stretch !important;
+        }
+
+        .image-grid .card,
+        .image-grid.three .card {
+            grid-column: span 4 !important;
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+
+        .image-grid .card.full-width,
+        .image-grid.three .card.full-width {
+            grid-column: 1 / -1 !important;
+        }
+
+        .image-grid .card:nth-last-child(2):nth-child(3n + 1),
+        .image-grid .card:nth-last-child(1):nth-child(3n + 2),
+        .image-grid.three .card:nth-last-child(2):nth-child(3n + 1),
+        .image-grid.three .card:nth-last-child(1):nth-child(3n + 2) {
+            grid-column: span 6 !important;
+        }
+
+        .image-grid .card:last-child:nth-child(3n + 1),
+        .image-grid.three .card:last-child:nth-child(3n + 1) {
+            grid-column: 1 / -1 !important;
+        }
+
+        .card {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100% !important;
+        }
+
+        .card-image {
+            width: 100% !important;
+            height: 285px !important;
+            background: #ffffff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            overflow: hidden !important;
+        }
+
+        .card-image img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            object-position: top center !important;
+            display: block !important;
+            background: #ffffff !important;
+        }
+
+        .card-content {
+            padding: 24px !important;
+            flex: 1 !important;
+        }
+
+        .dashboard-card .card-image {
+            height: 720px !important;
+            max-height: 78vh !important;
+            padding: 0 !important;
+        }
+
+        .dashboard-card .card-image img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            object-position: top center !important;
+        }
+
+        .subheading {
+            margin: 35px 0 20px;
+            color: #7dd3fc;
+            font-size: 25px;
+        }
+
+        .insights,
+        .recommendations {
+            display: grid !important;
+            grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+            gap: 24px !important;
+        }
+
+        .insight-box,
+        .recommendation-box {
+            grid-column: span 4 !important;
+            background: #07111f;
+            border: 1px solid #244760;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .insight-box h3,
+        .recommendation-box h3 {
+            color: #7dd3fc;
+            margin-bottom: 12px;
+            font-size: 19px;
+        }
+
+        .insight-box p,
+        .recommendation-box p {
+            color: #c9d7e8;
+            font-size: 16px;
+        }
+
+        .insight-box:nth-last-child(2):nth-child(3n + 1),
+        .insight-box:nth-last-child(1):nth-child(3n + 2),
+        .recommendation-box:nth-last-child(2):nth-child(3n + 1),
+        .recommendation-box:nth-last-child(1):nth-child(3n + 2) {
+            grid-column: span 6 !important;
+        }
+
+        .insight-box:last-child:nth-child(3n + 1),
+        .recommendation-box:last-child:nth-child(3n + 1) {
+            grid-column: 1 / -1 !important;
+        }
+
+        @media (max-width: 1150px) {
+
+            .image-grid .card,
+            .image-grid.three .card,
+            .image-grid .card:nth-last-child(2):nth-child(3n + 1),
+            .image-grid .card:nth-last-child(1):nth-child(3n + 2),
+            .image-grid.three .card:nth-last-child(2):nth-child(3n + 1),
+            .image-grid.three .card:nth-last-child(1):nth-child(3n + 2),
+            .insight-box,
+            .recommendation-box {
+                grid-column: span 6 !important;
+            }
+
+            .image-grid .card:last-child:nth-child(2n + 1),
+            .image-grid.three .card:last-child:nth-child(2n + 1),
+            .insight-box:last-child:nth-child(2n + 1),
+            .recommendation-box:last-child:nth-child(2n + 1) {
+                grid-column: 1 / -1 !important;
+            }
+
+            .card-image {
+                height: 260px !important;
+            }
+
+            .dashboard-card .card-image {
+                height: 560px !important;
+            }
+        }
+
+        @media (max-width: 760px) {
+
+            .image-grid,
+            .image-grid.three,
+            .insights,
+            .recommendations {
+                grid-template-columns: 1fr !important;
+            }
+
+            .image-grid .card,
+            .image-grid.three .card,
+            .image-grid .card.full-width,
+            .image-grid.three .card.full-width,
+            .insight-box,
+            .recommendation-box {
+                grid-column: auto !important;
+            }
+
+            .card-image {
+                height: 230px !important;
+            }
+
+            .dashboard-card .card-image {
+                height: 360px !important;
+                max-height: none !important;
+            }
+        }
+
+
+
+
+        /* =====================================================
+   ZOOM HOVER AND BUBBLE CHART UPDATE
+   - All image cards show 'Click to zoom' on hover
+   - Bubble chart card is larger
+   - Existing image links and filenames are unchanged
+   ===================================================== */
+
+        .card-image {
+            position: relative !important;
+        }
+
+        .zoom-text {
+            position: absolute;
+            left: 50%;
+            bottom: 16px;
+            transform: translateX(-50%);
+            background: rgba(7, 17, 31, 0.88);
+            color: #ffffff;
+            border: 1px solid rgba(125, 211, 252, 0.55);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, bottom 0.25s ease;
+            z-index: 3;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.18);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .card-image:hover::after {
+            opacity: 1;
+        }
+
+        .card-image:hover .zoom-text {
+            opacity: 1;
+            bottom: 24px;
+        }
+
+        .card-image img {
+            cursor: zoom-in !important;
+        }
+
+        /* Make only the Campaign Bubble Chart larger */
+        .bubble-chart-card {
+            grid-column: span 6 !important;
+        }
+
+        .bubble-chart-card .card-image {
+            height: 480px !important;
+        }
+
+        .bubble-chart-card .card-image img {
+            object-fit: contain !important;
+            object-position: center center !important;
+            background: #ffffff !important;
+        }
+
+        /* Keep the bubble chart large but responsive */
+        @media (max-width: 1150px) {
+            .bubble-chart-card {
+                grid-column: 1 / -1 !important;
+            }
+
+            .bubble-chart-card .card-image {
+                height: 440px !important;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .bubble-chart-card {
+                grid-column: auto !important;
+            }
+
+            .bubble-chart-card .card-image {
+                height: 320px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Social Media Engagement Analytics Dashboard</h1>
+            <p>
+                This project analyses social media engagement across multiple platforms using Tableau.
+                The dashboard explores likes, shares, comments, total engagement, engagement rate,
+                content performance, campaign performance, audience age groups, and geographic trends.
+                The project also demonstrates data cleaning, grouping, calculated fields, dashboard design,
+                and interactive storytelling.
+            </p>
+        </header>
+        <section class="section">
+            <h2>Final Dashboard</h2>
+            <div class="image-grid">
+                <div class="card full-width dashboard-card">
+                    <a href="#img41">
+                        <div class="card-image"><img alt="Final Tableau Dashboard"
+                                src="Screenshots/Project7/41_Final_Dashboard.png" /><span class="zoom-text">Click to
+                                zoom</span></div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Final Dashboard • Figure 41</span>
+                        <h3>Completed Social Media Engagement Dashboard</h3>
+                        <p>
+                            This is the final Tableau dashboard combining KPI cards, engagement charts,
+                            campaign analysis, content analysis, geographic mapping, heatmaps and filters.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <h2>Data Import and Preparation</h2>
+            <div class="image-grid three">
+                <div class="card">
+                    <a href="#img01">
+                        <div class="card-image"><img alt="" src="Screenshots/Project7/01_Dataset_Import.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Data Import • Figure 1</span>
+                        <h3>Dataset Import</h3>
+                        <p>The messy CSV dataset was imported into Tableau for analysis.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <a href="#img02">
+                        <div class="card-image"><img alt="" src="Screenshots/Project7/02_Data_Source_Page.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Data Source • Figure 2</span>
+                        <h3>Data Source Page</h3>
+                        <p>This shows the connected dataset and field structure in Tableau.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <a href="#img03">
+                        <div class="card-image"><img alt="" src="Screenshots/Project7/03_First_Worksheet.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Worksheet • Figure 3</span>
+                        <h3>First Worksheet</h3>
+                        <p>A blank worksheet was opened to begin building the visual analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <h2>Data Cleaning and Grouping</h2>
+            <div class="image-grid three">
+                <div class="card">
+                    <a href="#img04">
+                        <div class="card-image"><img alt="" src="Screenshots/Project7/04_Platform_Cleaning.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Cleaning • Figure 4</span>
+                        <h3>Platform Grouping</h3>
+                        <p>Different spellings of platforms were grouped into clean platform categories.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <a href="#img05">
+                        <div class="card-image"><img alt="" src="Screenshots/Project7/05_Content_Type_Cleaning.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Cleaning • Figure 5</span>
+                        <h3>Content Type Grouping</h3>
+                        <p>Content type values were cleaned and grouped for consistent analysis.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <a href="#img06">
+                        <div class="card-image"><img alt="" src="Screenshots/Project7/06_Campaign_Cleaning.png.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Cleaning • Figure 6</span>
+                        <h3>Campaign Grouping</h3>
+                        <p>Campaign names were grouped to remove inconsistencies and duplicates.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <a href="#img07">
+                        <div class="card-image"><img alt="" src="Screenshots/Project7/07_Country_Cleaning.png.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Cleaning • Figure 7</span>
+                        <h3>Country Grouping</h3>
+                        <p>Country names were standardised to support geographic analysis.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <a href="#img08">
+                        <div class="card-image"><img alt=""
+                                src="Screenshots/Project7/08_Remove_Blank_Platforms.png.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Filter • Figure 8</span>
+                        <h3>Platform Filter</h3>
+                        <p>The null platform value was excluded from the analysis.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <a href="#img09">
+                        <div class="card-image"><img alt=""
+                                src="Screenshots/Project7/10_Remove_Blank_ContentType.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Filter • Figure 9</span>
+                        <h3>Content Type Filter</h3>
+                        <p>Null content type values were removed to improve dashboard accuracy.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <h2>Calculated Fields</h2>
+            <div class="image-grid three">
+                <div class="card"><a href="#img10">
+                        <div class="card-image"><img src="Screenshots/Project7/15_Clean_Clicks.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Calculation • Figure 10</span>
+                        <h3>Clean Clicks</h3>
+                        <p>Null click values were replaced with zero.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img11">
+                        <div class="card-image"><img src="Screenshots/Project7/16_Clean_Followers.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Calculation • Figure 11</span>
+                        <h3>Clean Followers</h3>
+                        <p>Null follower values were replaced with zero.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img12">
+                        <div class="card-image"><img src="Screenshots/Project7/17_Clean_Impressions.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Calculation • Figure 12</span>
+                        <h3>Clean Impressions</h3>
+                        <p>Null impression values were replaced with zero.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img13">
+                        <div class="card-image"><img src="Screenshots/Project7/18_Clean_Engagement_Rate.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Calculation • Figure 13</span>
+                        <h3>Clean Engagement Rate</h3>
+                        <p>Invalid engagement rates below 0 or above 100 were removed.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img14">
+                        <div class="card-image"><img src="Screenshots/Project7/19_Total_Engagement_Field.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Calculation • Figure 14</span>
+                        <h3>Total Engagement</h3>
+                        <p>Total engagement was calculated from likes, shares and comments.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img15">
+                        <div class="card-image"><img src="Screenshots/Project7/12_Clean_Likes.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Calculation • Figure 15</span>
+                        <h3>Clean Likes</h3>
+                        <p>Null likes were replaced with zero.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img16">
+                        <div class="card-image"><img src="Screenshots/Project7/13_Clean_Shares.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Calculation • Figure 16</span>
+                        <h3>Clean Shares</h3>
+                        <p>Null share values were replaced with zero.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img17">
+                        <div class="card-image"><img src="Screenshots/Project7/14_Clean_Comments.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Calculation • Figure 17</span>
+                        <h3>Clean Comments</h3>
+                        <p>Null comment values were replaced with zero.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <h2>Geographic Setup</h2>
+            <div class="image-grid">
+                <div class="card">
+                    <a href="#img22">
+                        <div class="card-image"><img src="Screenshots/Project7/22_Latitude_Geographic_Role.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Geographic Role • Figure 22</span>
+                        <h3>Latitude Geographic Role</h3>
+                        <p>Latitude was assigned as a geographic field for mapping.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <a href="#img23">
+                        <div class="card-image"><img src="Screenshots/Project7/23_Longitude_Geographic_Role.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content">
+                        <span class="badge">Geographic Role • Figure 23</span>
+                        <h3>Longitude Geographic Role</h3>
+                        <p>Longitude was assigned as a geographic field for mapping.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <h2>Dashboard KPI Summary</h2>
+            <div class="image-grid three">
+                <div class="card"><a href="#img24">
+                        <div class="card-image"><img src="Screenshots/Project7/24_KPI_Total_Likes.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">KPI • Figure 24</span>
+                        <h3>KPI Total Likes</h3>
+                        <p>Total likes after cleaning.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img25">
+                        <div class="card-image"><img src="Screenshots/Project7/25_KPI_Total_Shares.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">KPI • Figure 25</span>
+                        <h3>KPI Total Shares</h3>
+                        <p>Total shares after cleaning.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img26">
+                        <div class="card-image"><img src="Screenshots/Project7/26_KPI_Average_Engagement.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">KPI • Figure 26</span>
+                        <h3>KPI Average Engagement Rate</h3>
+                        <p>Average engagement rate across posts.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img27">
+                        <div class="card-image"><img src="Screenshots/Project7/27_KPI_Total_Posts.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">KPI • Figure 27</span>
+                        <h3>KPI Total Posts</h3>
+                        <p>Total number of posts analysed.</p>
+                    </div>
+                </div>
+                <div class="card full-width"><a href="#img28">
+                        <div class="card-image"><img src="Screenshots/Project7/28_KPI_Total_Engagement.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">KPI • Figure 28</span>
+                        <h3>KPI Total Engagement</h3>
+                        <p>Total engagement from likes, shares and comments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <h2>Visual Analytics</h2>
+            <div class="image-grid">
+                <div class="card"><a href="#img29">
+                        <div class="card-image"><img src="Screenshots/Project7/29_Bar_Chart_Likes_By_Platform.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content"><span class="badge">Chart • Figure 29</span>
+                        <h3>Likes by Platform</h3>
+                        <p>Compares total likes across social media platforms.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img30">
+                        <div class="card-image"><img
+                                src="Screenshots/Project7/30_Column_Chart_Campaign_Engagement.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Chart • Figure 30</span>
+                        <h3>Engagement by Campaign</h3>
+                        <p>Shows which campaigns generated the highest total engagement.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img31">
+                        <div class="card-image"><img src="Screenshots/Project7/31_Line_Chart_Engagement_Trend.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content"><span class="badge">Trend • Figure 31</span>
+                        <h3>Engagement Trend</h3>
+                        <p>Shows how engagement changed over time across platforms.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img32">
+                        <div class="card-image"><img src="Screenshots/Project7/32_Pie_Chart_With_Percentages.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content"><span class="badge">Pie Chart • Figure 32</span>
+                        <h3>Content Type Share</h3>
+                        <p>Displays the distribution of content types used in the dataset.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img33">
+                        <div class="card-image"><img src="Screenshots/Project7/33_Treemap_Content_Engagement.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content"><span class="badge">Treemap • Figure 33</span>
+                        <h3>Engagement Treemap</h3>
+                        <p>Compares total engagement by content type using treemap size.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img34">
+                        <div class="card-image"><img
+                                src="Screenshots/Project7/34_Scatter_Plot_Followers_vs_Engagement.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Scatter Plot • Figure 34</span>
+                        <h3>Followers vs Engagement</h3>
+                        <p>Explores the relationship between followers and engagement score.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img35">
+                        <div class="card-image"><img src="Screenshots/Project7/35_Map_With_Bubbles.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Map • Figure 35</span>
+                        <h3>Engagement by Country</h3>
+                        <p>Shows engagement performance by country using bubble size and colour intensity.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img36">
+                        <div class="card-image"><img src="Screenshots/Project7/36_Heat_Map_Platform_Content.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content"><span class="badge">Heatmap • Figure 36</span>
+                        <h3>Platform Content Heatmap</h3>
+                        <p>Compares engagement performance by platform and content type.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img37">
+                        <div class="card-image"><img src="Screenshots/Project7/38_Highlight_Table_Age_Platform.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content"><span class="badge">Highlight Table • Figure 37</span>
+                        <h3>Age Group Engagement</h3>
+                        <p>Shows how engagement differs across age groups and platforms.</p>
+                    </div>
+                </div>
+                <div class="card bubble-chart-card"><a href="#img38">
+                        <div class="card-image"><img src="Screenshots/Project7/37_Packed_Bubble_Campaigns.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Bubble Chart • Figure 38</span>
+                        <h3>Campaign Bubble Chart</h3>
+                        <p>Displays campaign performance using bubble size and colour.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <h2>Dashboard Development</h2>
+            <div class="image-grid">
+                <div class="card"><a href="#img39">
+                        <div class="card-image"><img src="Screenshots/Project7/39_KPI_Cards_Added.png" /><span
+                                class="zoom-text">Click to zoom</span></div>
+                    </a>
+                    <div class="card-content"><span class="badge">Dashboard • Figure 39</span>
+                        <h3>Dashboard Layout</h3>
+                        <p>The dashboard layout was created by arranging KPI cards and worksheets.</p>
+                    </div>
+                </div>
+                <div class="card"><a href="#img40">
+                        <div class="card-image"><img src="Screenshots/Project7/40_Final_Dashboard with Filter.png" />
+                            <span class="zoom-text">Click to zoom</span>
+                        </div>
+                    </a>
+                    <div class="card-content"><span class="badge">Dashboard • Figure 40</span>
+                        <h3>Dashboard Build</h3>
+                        <p>This shows the dashboard build process with multiple charts and filters arranged together.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <h2>Insights and Recommendations</h2>
+            <p class="section-intro">
+                The dashboard provides a complete view of social media engagement performance after the dataset was
+                cleaned,
+                grouped and transformed in Tableau. These findings are based on the KPI cards, platform comparison,
+                campaign analysis, content type visuals, engagement trend, geographic map, heatmap, scatter plot and
+                final dashboard filters.
+            </p>
+            <h3 class="subheading">Key Insights</h3>
+            <div class="insights">
+                <div class="insight-box">
+                    <h3>📌 1. Strong total engagement performance</h3>
+                    <p>
+                        The dashboard reports a total engagement score of 27,455,226. This shows that the cleaned
+                        dataset
+                        contains a high level of audience interaction and is suitable for campaign, content and
+                        platform-level
+                        decision-making.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 2. Likes are the largest engagement contributor</h3>
+                    <p>
+                        Total likes reached 22,477,013, making likes the dominant engagement measure in the dashboard.
+                        This suggests that quick user reactions were more frequent than deeper actions such as shares or
+                        comments.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 3. Share activity shows strong distribution potential</h3>
+                    <p>
+                        Total shares reached 2,936,225. This indicates that many posts were not only liked but also
+                        shared,
+                        helping the content reach wider audiences beyond the original viewers.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 4. Average engagement rate became more reliable after cleaning</h3>
+                    <p>
+                        The average engagement rate is 17.39 after invalid values were cleaned. Removing values below 0
+                        and
+                        above 100 helped prevent unrealistic records from distorting the KPI and visual analysis.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 5. Platform performance is not equal</h3>
+                    <p>
+                        The Likes by Platform chart shows clear differences between platforms. Some platforms generated
+                        stronger
+                        likes and engagement than others, showing that platform choice has a major impact on social
+                        media results.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 6. Campaign type affects engagement</h3>
+                    <p>
+                        The Engagement by Campaign chart and Campaign Bubble Chart show that campaign categories
+                        performed
+                        differently. Community-focused and product-related campaigns appear more effective than weaker
+                        campaign
+                        categories.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 7. Content format matters</h3>
+                    <p>
+                        The Content Type Share and Engagement Treemap visuals show that different content formats
+                        contribute
+                        differently to engagement. This means content strategy should not treat all formats as equal.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 8. Engagement changes over time</h3>
+                    <p>
+                        The Engagement Trend line chart shows that engagement fluctuates across time. This highlights
+                        the
+                        importance of monitoring campaign periods, posting frequency and timing.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 9. Followers do not always guarantee stronger engagement</h3>
+                    <p>
+                        The Followers vs Engagement scatter plot shows that a larger follower base does not always
+                        translate
+                        into higher engagement. Content quality, audience relevance and campaign message also matter.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 10. Geography influences campaign performance</h3>
+                    <p>
+                        The country map shows differences in engagement across locations. This supports the need for
+                        country-level
+                        targeting rather than using one generic strategy for every region.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 11. Audience age groups respond differently</h3>
+                    <p>
+                        The Age Group Engagement highlight table shows that engagement varies by age group and platform.
+                        This
+                        means future campaigns should be tailored to audience demographics.
+                    </p>
+                </div>
+                <div class="insight-box">
+                    <h3>📌 12. Data cleaning improved the final dashboard</h3>
+                    <p>
+                        Grouping inconsistent platform, content type, campaign and country values made the dashboard
+                        much cleaner.
+                        Filtering blank values also prevented misleading null categories from appearing in the visuals.
+                    </p>
+                </div>
+            </div>
+            <h3 class="subheading">Recommendations</h3>
+            <div class="recommendations">
+                <div class="recommendation-box">
+                    <h3>🚀 1. Prioritise high-performing platforms</h3>
+                    <p>
+                        Future campaigns should focus more resources on platforms that generated stronger likes and
+                        engagement.
+                        These platforms should receive more frequent posts, better campaign assets and closer
+                        monitoring.
+                    </p>
+                </div>
+                <div class="recommendation-box">
+                    <h3>🚀 2. Expand successful campaign types</h3>
+                    <p>
+                        Campaign types that performed strongly should be repeated and improved. Community engagement and
+                        product-related campaigns can be used as templates for future planning.
+                    </p>
+                </div>
+                <div class="recommendation-box">
+                    <h3>🚀 3. Invest in stronger content formats</h3>
+                    <p>
+                        The organisation should increase the use of high-performing content formats such as reels,
+                        videos,
+                        carousels and short-form posts where they show stronger engagement.
+                    </p>
+                </div>
+                <div class="recommendation-box">
+                    <h3>🚀 4. Improve weaker content types</h3>
+                    <p>
+                        Lower-performing content formats should be reviewed rather than removed immediately. They can be
+                        tested
+                        with better captions, stronger visuals, clearer calls to action and improved posting times.
+                    </p>
+                </div>
+                <div class="recommendation-box">
+                    <h3>🚀 5. Use age-group targeting</h3>
+                    <p>
+                        Age-group insights should guide campaign messaging. Younger audiences may respond better to fast
+                        visual
+                        content, while older groups may prefer informative or trust-building campaign messages.
+                    </p>
+                </div>
+                <div class="recommendation-box">
+                    <h3>🚀 6. Apply country-level campaign planning</h3>
+                    <p>
+                        Countries with stronger engagement should be prioritised for campaign expansion. Countries with
+                        weaker
+                        engagement should be reviewed for localisation, language, timing or platform issues.
+                    </p>
+                </div>
+                <div class="recommendation-box">
+                    <h3>🚀 7. Monitor engagement trends monthly</h3>
+                    <p>
+                        The engagement trend should be reviewed regularly to identify peaks, drops and seasonal
+                        patterns.
+                        This will help teams plan campaign launches during stronger engagement periods.
+                    </p>
+                </div>
+                <div class="recommendation-box">
+                    <h3>🚀 8. Do not rely only on follower count</h3>
+                    <p>
+                        The scatter plot shows that followers alone are not enough to measure success. Engagement rate,
+                        total
+                        engagement, campaign type and content format should be analysed together.
+                    </p>
+                </div>
+                <div class="recommendation-box">
+                    <h3>🚀 9. Improve data collection standards</h3>
+                    <p>
+                        The cleaning stage showed the importance of consistent naming. Future datasets should use
+                        standard
+                        labels for platform, campaign, content type and country fields before analysis begins.
+                    </p>
+                </div>
+                <div class="recommendation-box">
+                    <h3>🚀 10. Use the dashboard for stakeholder reporting</h3>
+                    <p>
+                        The final Tableau dashboard should be used as a reporting tool for marketing teams and managers
+                        because
+                        it brings together KPIs, charts, maps, filters and business insights in one place.
+                    </p>
+                </div>
+            </div>
+        </section>
+        <div class="buttons">
+            <a class="btn" href="../index.html">⬅ Back to Portfolio</a>
+            <a class="btn" download="" href="datasets and files/Proj7_messy_social_media_engagement_project7.csv">⬇
+                Download Messy Dataset</a>
+            <a class="btn" download=""
+                href="datasets and files/Proj7_Cleaned_social_media_engagement_project7_messy_social_media_engagement_project7.csv">⬇
+                Download Cleaned Dataset</a>
+        </div>
+        <footer>
+            <p>Created as part of a Data Analytics Portfolio Project using Tableau.</p>
+        </footer>
+    </div>
+    <!-- Lightbox Images -->
+    <div class="lightbox" id="img01"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/01_Dataset_Import.png" /></div>
+    <div class="lightbox" id="img02"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/02_Data_Source_Page.png" /></div>
+    <div class="lightbox" id="img03"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/03_First_Worksheet.png" /></div>
+    <div class="lightbox" id="img04"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/04_Platform_Cleaning.png" /></div>
+    <div class="lightbox" id="img05"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/05_Content_Type_Cleaning.png" /></div>
+    <div class="lightbox" id="img06"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/06_Campaign_Grouping.png" /></div>
+    <div class="lightbox" id="img07"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/07_Country_Grouping.png" /></div>
+    <div class="lightbox" id="img08"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/08_Platform_Filter.png" /></div>
+    <div class="lightbox" id="img09"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/09_Content_Type_Filter.png" /></div>
+    <div class="lightbox" id="img10"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/10_Clean_Clicks.png" /></div>
+    <div class="lightbox" id="img11"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/11_Clean_Followers.png" /></div>
+    <div class="lightbox" id="img12"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/12_Clean_Impressions.png" /></div>
+    <div class="lightbox" id="img13"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/13_Clean_Engagement_Rate.png" /></div>
+    <div class="lightbox" id="img14"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/14_Total_Engagement.png" /></div>
+    <div class="lightbox" id="img15"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/15_Clean_Likes.png" /></div>
+    <div class="lightbox" id="img16"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/16_Clean_Shares.png" /></div>
+    <div class="lightbox" id="img17"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/17_Clean_Comments.png" /></div>
+    <div class="lightbox" id="img22"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/22_Latitude_Geographic_Role.png" /></div>
+    <div class="lightbox" id="img23"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/23_Longitude_Geographic_Role.png" /></div>
+    <div class="lightbox" id="img24"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/24_KPI_Total_Likes.png" /></div>
+    <div class="lightbox" id="img25"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/25_KPI_Total_Shares.png" /></div>
+    <div class="lightbox" id="img26"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/26_KPI_Average_Engagement_Rate.png" /></div>
+    <div class="lightbox" id="img27"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/27_KPI_Total_Posts.png" /></div>
+    <div class="lightbox" id="img28"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/28_KPI_Total_Engagement.png" /></div>
+    <div class="lightbox" id="img29"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/29_Likes_by_Platform.png" /></div>
+    <div class="lightbox" id="img30"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/30_Engagement_by_Campaign.png" /></div>
+    <div class="lightbox" id="img31"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/31_Engagement_Trend.png" /></div>
+    <div class="lightbox" id="img32"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/32_Content_Type_Share.png" /></div>
+    <div class="lightbox" id="img33"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/33_Engagement_Treemap.png" /></div>
+    <div class="lightbox" id="img34"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/34_Followers_vs_Engagement.png" /></div>
+    <div class="lightbox" id="img35"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/35_Engagement_by_Country.png" /></div>
+    <div class="lightbox" id="img36"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/36_Platform_Content_Heatmap.png" /></div>
+    <div class="lightbox" id="img37"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/37_Age_Group_Engagement.png" /></div>
+    <div class="lightbox" id="img38"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/38_Campaign_Bubble_Chart.png" /></div>
+    <div class="lightbox" id="img39"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/39_Dashboard_Layout.png" /></div>
+    <div class="lightbox" id="img40"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/40_Dashboard_Build.png" /></div>
+    <div class="lightbox" id="img41"><a class="close" href="#">×</a><img
+            src="Screenshots/Project7/41_Final_Dashboard.png" /></div>
+</body>
+
+</html>

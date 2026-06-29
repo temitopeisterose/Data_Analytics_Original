@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Care Workforce Analytics Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* ===== GLOBAL ===== */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #02141c, #063544);
+            color: white;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            text-align: center;
+            padding: 100px 20px 60px;
+            background: linear-gradient(135deg, #00a8cc, #005f73);
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 900;
+        }
+
+        .hero p {
+            opacity: 0.9;
+        }
+
+        /* ===== KPI STRIP ===== */
+        .kpi-strip {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px auto;
+        }
+
+        .kpi {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 18px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+        }
+
+        .kpi h2 {
+            color: #00e5ff;
+            font-weight: 800;
+        }
+
+        /* ===== SECTION ===== */
+        .section-card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            border-radius: 25px;
+            padding: 45px;
+            margin: 40px auto;
+            max-width: 1100px;
+        }
+
+        /* ===== TITLE ===== */
+        .section-title {
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        /* ===== OBJECTIVES ===== */
+        .objective {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* ===== IMAGE CARDS ===== */
+        .image-card {
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.06);
+            transition: 0.3s;
+        }
+
+        .image-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            cursor: zoom-in;
+        }
+
+        /* ===== IMAGE HEADERS ===== */
+        .image-header {
+            padding: 12px;
+            font-weight: 700;
+        }
+
+        .blue {
+            background: #0077b6;
+        }
+
+        .green {
+            background: #00b894;
+        }
+
+        .purple {
+            background: #6a4c93;
+        }
+
+        .orange {
+            background: #ff7b00;
+        }
+
+        .image-desc {
+            padding: 15px;
+            color: #d0e7ef;
+        }
+
+        /* ===== FINAL SECTION ===== */
+        .final-section {
+            background: linear-gradient(135deg, #001219, #003845);
+            padding: 60px 40px;
+            border-radius: 25px;
+            text-align: center;
+        }
+
+        .final-title {
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .final-text {
+            color: #a6dbe8;
+            max-width: 600px;
+            margin: 0 auto 35px;
+        }
+
+        /* BUTTON GROUP */
+        .final-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        /* BUTTONS */
+        .btn-download {
+            background: linear-gradient(135deg, #00e5ff, #00a8cc);
+            color: #001219;
+            padding: 14px 35px;
+            border-radius: 40px;
+            font-weight: 700;
+        }
+
+        .btn-back {
+            border: 2px solid #00e5ff;
+            color: #00e5ff;
+            padding: 12px 30px;
+            border-radius: 40px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #7fbac9;
+        }
+
+        /* ===== LIGHTBOX ===== */
+        #lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            /* 🔥 VERY IMPORTANT */
+        }
+
+        #lightbox img {
+            max-width: 90%;
+            max-height: 85%;
+            border-radius: 15px;
+            transition: transform 0.2s ease;
+            cursor: zoom-in;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <h1>Care Workforce Analytics Dashboard</h1>
+        <p>Operational Insight • Workforce Performance • Data-Driven Decisions</p>
+    </section>
+
+    <!-- KPI -->
+    <div class="kpi-strip">
+        <div class="kpi">
+            <h2>57%</h2>
+            <p>Staff at Risk</p>
+        </div>
+        <div class="kpi">
+            <h2>High</h2>
+            <p>Overtime</p>
+        </div>
+        <div class="kpi">
+            <h2>4+</h2>
+            <p>Departments</p>
+        </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="section-card">
+        <h3 class="section-title">📌 Project Overview</h3>
+        <p>
+            This project delivers a workforce analytics dashboard designed to support operational decision-making
+            within a care organisation. Workforce data was analysed to uncover staffing distribution patterns,
+            overtime trends, and operational risks.
+        </p>
+    </div>
+
+    <!-- OBJECTIVES -->
+    <div class="section-card">
+        <h3 class="section-title">🎯 Objectives</h3>
+        <div class="objective">Analyse workforce distribution</div>
+        <div class="objective">Monitor overtime usage</div>
+        <div class="objective">Identify staff at risk</div>
+        <div class="objective">Build dashboard</div>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="section-card">
+        <h3 class="section-title">📊 Insights</h3>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="image-card">
+                    <img src="Screenshots/Project1/Staff_Distribution_by_Role.png">
+                    <div class="image-header blue">Role Distribution</div>
+                    <div class="image-desc">Care Assistants dominate staffing.</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="image-card">
+                    <img src="Screenshots/Project1/Overtime_by_Dept.png">
+                    <div class="image-header green">Overtime</div>
+                    <div class="image-desc">Demential Care shows highest overtime.</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="image-card">
+                    <img src="Screenshots/Project1/Staff_at_Risk.png">
+                    <div class="image-header purple">Risk</div>
+                    <div class="image-desc">57% flagged as risk.</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="image-card">
+                    <img src="Screenshots/Project1/Dashboard.png">
+                    <div class="image-header orange">Dashboard</div>
+                    <div class="image-desc">Final dashboard view.</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FINAL SECTION -->
+    <div class="section-card final-section">
+
+        <h3 class="final-title">📁 Project Deliverables</h3>
+
+        <p class="final-text">
+            Download the complete Excel dashboard and explore the workforce analytics solution.
+        </p>
+
+        <div class="final-buttons">
+
+            <a href="datasets and files/Project1_CareWorkforce_Dashboard.xlsx" class="btn-download">
+                ⬇ Download Dashboard
+            </a>
+
+            <a href="../index.html" class="btn-back">
+                Back to Portfolio
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>© Workforce Analytics Project • Excel Dashboard</p>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox">
+        <img id="lightbox-img">
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            let scale = 1;
+
+            const images = document.querySelectorAll(".image-card img");
+            const lightbox = document.getElementById("lightbox");
+            const lightboxImg = document.getElementById("lightbox-img");
+
+            // OPEN LIGHTBOX
+            images.forEach(img => {
+                img.style.cursor = "zoom-in";
+
+                img.addEventListener("click", function () {
+                    lightbox.style.display = "flex";
+                    lightboxImg.src = this.src;
+
+                    scale = 1;
+                    lightboxImg.style.transform = "scale(1)";
+                });
+            });
+
+            // CLOSE LIGHTBOX
+            lightbox.addEventListener("click", function () {
+                lightbox.style.display = "none";
+            });
+
+            // SCROLL ZOOM
+            lightboxImg.addEventListener("wheel", function (e) {
+                e.preventDefault();
+
+                if (e.deltaY < 0) {
+                    scale += 0.1;
+                } else {
+                    scale -= 0.1;
+                }
+
+                if (scale < 1) scale = 1;
+                if (scale > 3) scale = 3;
+
+                lightboxImg.style.transform = `scale(${scale})`;
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
