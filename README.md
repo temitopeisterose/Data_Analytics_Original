@@ -1,20 +1,18 @@
-# Hi there, I'm Dr. Vivian Edema 👋
+# Hi there, I'm Victoria Ajanaku 👋
 
-## Data Analyst | Business Intelligence Analyst | Data Analytics Instructor | Machine Learning Enthusiast
+## Data Analyst | Business Intelligence Analyst 
 
-Welcome to my GitHub! I'm passionate about transforming raw data into meaningful insights that support better business decisions. I enjoy solving real-world business problems using data analytics, statistics, machine learning and interactive dashboards.
+Welcome to my GitHub! I'm transitioning into data analytics, with a passion for turning data into actionable insights that support business decision-making. Leveraging my background in accounting, I enjoy solving real-world problems through data cleaning, analysis, and visualisation. 
 
-Alongside industry experience, I also teach Data Analytics, helping aspiring analysts develop practical skills in Excel, SQL, Python, R and Power BI through hands-on projects.
+I have hands-on experience with Excel, SQL, Python, and Power BI, and I use this GitHub to showcase projects that demonstrate my analytical skills, continuous learning, and commitment to delivering data-driven solutions.
 
 ---
 
 # 👩‍💻 About Me
 
-* 🎓 PhD in Computing & Technology
-* 🎓 MSc in Mobile Telecommunications
+* 🎓 HND Accounting
 * 👩‍🏫 Data Analytics Instructor
-* 💻 Data Analytics Professional
-* 💻 Previous Software Developer
+* 💻 Data Analytics 
 * 📊 Passionate about Business Intelligence, Data Visualisation and Predictive Analytics
 * 🤖 Exploring Artificial Intelligence and Machine Learning for business decision-making
 * 🌱 Always learning new tools, technologies and best practices in Data Analytics
@@ -242,12 +240,10 @@ Completed a comprehensive end-to-end finance analytics project demonstrating the
 I'm currently expanding my knowledge in:
 
 * Artificial Intelligence for Data Analytics
-* Advanced Machine Learning
+* Artificial Intelligence for Business Analytics
+* Artificial Intelligence for Project Manager
 * Business Intelligence
-* Cloud Analytics
-* Data Engineering Fundamentals
 * Responsible AI
-* Automation with Python
 
 ---
 
@@ -309,6 +305,5 @@ I'm always interested in collaborating on projects related to:
 * Machine Learning
 * Data Visualisation
 * AI for Business
-* Analytics Education
 
 Thank you for visiting my GitHub profile. Feel free to explore my repositories, and I hope they provide useful insights into my work and learning journey.
