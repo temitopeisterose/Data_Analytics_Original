@@ -11,7 +11,6 @@ I have hands-on experience with Excel, SQL, Python, and Power BI, and I use this
 # 👩‍💻 About Me
 
 * 🎓 HND Accounting
-* 👩‍🏫 Data Analytics Instructor
 * 💻 Data Analytics 
 * 📊 Passionate about Business Intelligence, Data Visualisation and Predictive Analytics
 * 🤖 Exploring Artificial Intelligence and Machine Learning for business decision-making
