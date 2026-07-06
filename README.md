@@ -10,15 +10,15 @@ I have hands-on experience with Excel, SQL, Python, and Power BI, and I use this
 
 # 👩‍💻 About Me
 
-* 🎓 HND Accounting
-* 💻 Data Analytics 
-* 📊 Passionate about Business Intelligence, Data Visualisation and Predictive Analytics
-* 🤖 Exploring Artificial Intelligence and Machine Learning for business decision-making
-* 🌱 Always learning new tools, technologies and best practices in Data Analytics
+* HND Accounting
+* Data Analytics 
+* Passionate about Business Intelligence, Data Visualisation and Predictive Analytics
+* Exploring Artificial Intelligence and Machine Learning for business decision-making
+* Always learning new tools, technologies and best practices in Data Analytics
 
 ---
 
-# 🛠️ Technical Skills
+# Technical Skills
 
 ### Data Analytics
 
@@ -66,13 +66,13 @@ I have hands-on experience with Excel, SQL, Python, and Power BI, and I use this
 
 ---
 
-# 📂 Featured Portfolio Projects
+# Featured Portfolio Projects
 
 Throughout my Data Analytics journey, I have completed a series of hands-on projects based on real-world business scenarios. Each project demonstrates different stages of the data analytics lifecycle, from data collection and transformation to statistical analysis, predictive analytics and business intelligence.
 
 ---
 
-## 🏥 PROJECT 1 • MICROSOFT EXCEL • CARE WORKFORCE ANALYTICS
+## PROJECT 1 • MICROSOFT EXCEL • CARE WORKFORCE ANALYTICS
 
 ### Operational Insight • Workforce Performance • Data-Driven Decisions
 
@@ -214,7 +214,6 @@ Completed a comprehensive end-to-end finance analytics project demonstrating the
 * Feature Engineering
 * Exploratory Data Analysis
 * Statistical Analysis
-* Machine Learning
 * Predictive Analytics
 * Dashboard Development
 * Business Intelligence
@@ -234,7 +233,7 @@ Completed a comprehensive end-to-end finance analytics project demonstrating the
 
 ---
 
-# 🚀 Current Learning Journey
+# Current Learning Journey
 
 I'm currently expanding my knowledge in:
 
@@ -246,14 +245,13 @@ I'm currently expanding my knowledge in:
 
 ---
 
-# 📚 Core Competencies
+# Core Competencies
 
 * Data Cleaning & Preparation
 * ETL Processes
 * Exploratory Data Analysis (EDA)
 * SQL Database Design
 * Statistical Analysis
-* Machine Learning
 * Data Storytelling
 * Dashboard Development
 * Business Intelligence
@@ -263,7 +261,7 @@ I'm currently expanding my knowledge in:
 
 ---
 
-# 📁 Repository Structure
+# Repository Structure
 
 My repositories include projects covering:
 
@@ -273,7 +271,6 @@ My repositories include projects covering:
 * R Programming
 * Power BI Dashboards
 * Tableau Dashboards
-* Machine Learning
 * Business Intelligence
 * Finance Analytics
 * Healthcare Analytics
@@ -282,7 +279,7 @@ My repositories include projects covering:
 
 ---
 
-# 💡 My Approach
+# My Approach
 
 I believe that great data analytics goes beyond writing code. Every project should:
 
@@ -295,7 +292,7 @@ I believe that great data analytics goes beyond writing code. Every project shou
 
 ---
 
-# 🤝 Let's Connect
+# Let's Connect
 
 I'm always interested in collaborating on projects related to:
 
