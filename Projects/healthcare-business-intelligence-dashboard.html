@@ -1,0 +1,3450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        Healthcare Business Intelligence & Performance Analytics Dashboard
+
+    </title>
+
+    <!-- Bootstrap -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Font -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+        html {
+
+            scroll-behavior: smooth;
+
+        }
+
+        body {
+
+            font-family: 'Poppins', sans-serif;
+
+            background: #08141f;
+
+            color: #F8FAFC;
+
+            overflow-x: hidden;
+
+        }
+
+        /* ==========================
+Scrollbar
+========================== */
+
+        ::-webkit-scrollbar {
+
+            width: 10px;
+
+        }
+
+        ::-webkit-scrollbar-thumb {
+
+            background: #00D4FF;
+
+            border-radius: 20px;
+
+        }
+
+        /* ==========================
+Navbar
+========================== */
+
+        .navbar {
+
+            background: #08141f;
+
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+
+            padding: 14px 0;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .35);
+
+        }
+
+        .navbar-brand {
+
+            font-size: 1.4rem;
+
+            font-weight: 700;
+
+            color: white !important;
+
+        }
+
+        .navbar-brand i {
+
+            color: #00D4FF;
+
+        }
+
+        .nav-link {
+
+            color: #d7e6ef !important;
+
+            margin-left: 18px;
+
+            transition: .35s;
+
+        }
+
+        .nav-link:hover {
+
+            color: #00D4FF !important;
+
+        }
+
+        /* ==========================
+Hero
+========================== */
+
+        .hero {
+
+            background:
+
+                linear-gradient(rgba(8, 20, 31, .82),
+
+                    rgba(8, 20, 31, .88)),
+
+                url("Screenshots/Project6/26_Powerbi_Dashboard.png");
+
+            background-size: cover;
+
+            background-position: center;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            text-align: center;
+
+            padding: 120px 20px;
+
+        }
+
+        .hero h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 25px;
+
+        }
+
+        .hero p {
+
+            font-size: 1.2rem;
+
+            color: #cbd5e1;
+
+            max-width: 900px;
+
+            margin: auto;
+
+            line-height: 2;
+
+        }
+
+        /* ==========================
+Buttons
+========================== */
+
+        .btn-main {
+
+            background: #00D4FF;
+
+            color: #08141f;
+
+            padding: 14px 36px;
+
+            border-radius: 40px;
+
+            font-weight: 700;
+
+            border: none;
+
+            margin: 10px;
+
+            transition: .35s;
+
+        }
+
+        .btn-main:hover {
+
+            background: white;
+
+            transform: translateY(-4px);
+
+        }
+
+        .btn-outline-main {
+
+            border: 2px solid #00D4FF;
+
+            color: white;
+
+            padding: 14px 36px;
+
+            border-radius: 40px;
+
+            margin: 10px;
+
+            transition: .35s;
+
+        }
+
+        .btn-outline-main:hover {
+
+            background: #00D4FF;
+
+            color: #08141f;
+
+        }
+
+        /* ==========================
+Tech Stack
+========================== */
+
+        .tech-stack {
+
+            margin-top: 45px;
+
+        }
+
+        .tech-stack span {
+
+            display: inline-block;
+
+            background: #102433;
+
+            padding: 12px 24px;
+
+            border-radius: 40px;
+
+            margin: 8px;
+
+            border: 1px solid rgba(255, 255, 255, .08);
+
+            transition: .35s;
+
+        }
+
+        .tech-stack span:hover {
+
+            background: #00D4FF;
+
+            color: #08141f;
+
+        }
+
+        /* ==========================
+Sections
+========================== */
+
+        .section {
+            padding: 50px 0;
+        }
+
+        .section-card {
+
+            background: #102433;
+
+            border-radius: 25px;
+
+            padding: 45px;
+
+            margin-bottom: 25px;
+
+            border: 1px solid rgba(255, 255, 255, .08);
+
+            box-shadow: 0 20px 45px rgba(0, 0, 0, .35);
+
+        }
+
+        .section-title {
+
+            font-size: 2.3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .section-title::after {
+
+            content: "";
+
+            display: block;
+
+            width: 70px;
+
+            height: 4px;
+
+            background: #00D4FF;
+
+            margin-top: 12px;
+
+            border-radius: 20px;
+
+        }
+
+        .section-card p {
+
+            color: #d3dce7;
+
+            line-height: 2;
+
+        }
+
+        /* ==========================
+Feature Cards
+========================== */
+
+        .feature-card {
+
+            background: #0f2030;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            height: 100%;
+
+            transition: .35s;
+
+            border: 1px solid rgba(255, 255, 255, .08);
+
+        }
+
+        .feature-card:hover {
+
+            transform: translateY(-8px);
+
+            box-shadow: 0 20px 40px rgba(0, 212, 255, .18);
+
+        }
+
+        .feature-card i {
+
+            font-size: 50px;
+
+            color: #00D4FF;
+
+            margin-bottom: 20px;
+
+        }
+
+        .feature-card h4 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .feature-card p {
+
+            color: #cbd5e1;
+
+            line-height: 1.8;
+
+        }
+
+        /* ==========================
+Images
+========================== */
+
+        .dashboard-image {
+
+            width: 100%;
+
+            border-radius: 18px;
+
+            border: 1px solid rgba(255, 255, 255, .08);
+
+            transition: .35s;
+
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .35);
+
+        }
+
+        .dashboard-image:hover {
+
+            transform: scale(1.02);
+
+        }
+
+        /* ==========================
+Content
+========================== */
+
+        .content-box {
+
+            padding: 15px;
+
+        }
+
+        .content-box h3 {
+
+            margin-bottom: 18px;
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+        }
+
+        .content-box p {
+
+            line-height: 2;
+
+            color: #d3dce7;
+
+        }
+
+        /* ==========================
+Responsive
+========================== */
+
+        @media(max-width:768px) {
+
+            .hero {
+
+                min-height: 85vh;
+
+            }
+
+            .hero h1 {
+
+                font-size: 2.6rem;
+
+            }
+
+            .hero p {
+
+                font-size: 1rem;
+
+            }
+
+            .section {
+
+                padding: 45px 0;
+
+            }
+
+            .section-card {
+
+                padding: 30px;
+
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ==========================
+NAVIGATION
+========================== -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+
+        <div class="container">
+
+            <a class="navbar-brand" href="../index.html">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                Data Analytics Portfolio
+
+            </a>
+
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
+
+                <span class="navbar-toggler-icon">
+
+                </span>
+
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbar">
+
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link" href="#overview">
+
+                            Overview
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link" href="#etl">
+
+                            ETL
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link" href="#dashboard">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link" href="#insights">
+
+                            Insights
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- ==========================
+HERO
+========================== -->
+
+    <header class="hero">
+
+        <div class="container">
+
+            <h1>
+
+                Healthcare Business Intelligence
+
+                <br>
+
+                & Performance Analytics Dashboard
+
+            </h1>
+
+            <p>
+
+                An end-to-end Business Intelligence solution developed using Microsoft Power BI, Power Query and DAX.
+                This project demonstrates the complete analytics lifecycle, from data preparation and transformation to
+                interactive dashboard development and business insight generation.
+
+            </p>
+
+            <div class="mt-5">
+
+                <a href="#overview" class="btn btn-main">
+
+                    Explore Project
+
+                </a>
+
+                <a href="../index.html" class="btn btn-outline-main">
+
+                    Back to Portfolio
+
+                </a>
+
+            </div>
+
+            <div class="tech-stack">
+
+                <span>Power BI</span>
+
+                <span>Power Query</span>
+
+                <span>DAX</span>
+
+                <span>Business Intelligence</span>
+
+                <span>Healthcare Analytics</span>
+
+                <span>Interactive Dashboard</span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- ==========================
+PROJECT OVERVIEW
+========================== -->
+
+    <section class="section" id="overview">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Project Overview
+
+                </h2>
+
+                <p>
+
+                    This project demonstrates the complete design and implementation of an interactive Healthcare
+                    Business Intelligence dashboard using Microsoft Power BI. Starting with a raw healthcare dataset,
+                    Power Query was used to extract, clean and transform the data before building analytical measures
+                    with DAX and designing a fully interactive executive dashboard.
+
+                </p>
+
+                <p>
+
+                    The dashboard enables healthcare stakeholders to monitor patient admissions, treatment costs,
+                    departmental performance, patient satisfaction and geographical trends through intuitive data
+                    visualisations. By combining ETL, data modelling and interactive reporting, the project transforms
+                    raw operational data into meaningful business intelligence that supports evidence-based
+                    decision-making.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ===== END OF PART 1 ===== -->
+
+    <!-- ==========================================================
+    BUSINESS PROBLEM
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Business Problem
+
+                </h2>
+
+                <p>
+
+                    Healthcare organisations generate thousands of operational records every day, including patient
+                    admissions, treatment costs, departmental activity, patient satisfaction and demographic
+                    information.
+                    However, raw operational datasets often contain missing values, inconsistent text formatting,
+                    duplicate
+                    records and invalid data that reduce the reliability of reporting and business decision-making.
+
+                </p>
+
+                <p>
+
+                    The objective of this project was to transform the raw healthcare dataset into a reliable analytical
+                    model capable of supporting interactive reporting and evidence-based healthcare management using
+                    Microsoft Power BI.
+
+                </p>
+
+                <div class="row g-4 mt-4">
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-cash-stack"></i>
+
+                            <h4>Treatment Costs</h4>
+
+                            <p>
+
+                                Analyse hospital expenditure and monitor treatment costs across departments.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-people-fill"></i>
+
+                            <h4>Patient Care</h4>
+
+                            <p>
+
+                                Evaluate patient admissions, satisfaction and treatment outcomes.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-hospital-fill"></i>
+
+                            <h4>Departments</h4>
+
+                            <p>
+
+                                Compare departmental performance and identify resource utilisation.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-bar-chart-line-fill"></i>
+
+                            <h4>Business Intelligence</h4>
+
+                            <p>
+
+                                Convert operational healthcare data into actionable insights.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    TECHNOLOGIES USED
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Technologies Used
+
+                </h2>
+
+                <div class="row g-4 mt-3">
+
+                    <div class="col-lg-2 col-md-4 col-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-file-earmark-excel-fill"></i>
+
+                            <h5>Excel</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-2 col-md-4 col-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-funnel-fill"></i>
+
+                            <h5>Power Query</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-2 col-md-4 col-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-calculator-fill"></i>
+
+                            <h5>DAX</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-2 col-md-4 col-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-bar-chart-fill"></i>
+
+                            <h5>Power BI</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-2 col-md-4 col-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-database-fill"></i>
+
+                            <h5>ETL</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-2 col-md-4 col-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-graph-up-arrow"></i>
+
+                            <h5>Analytics</h5>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    PROJECT WORKFLOW
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Project Workflow
+
+                </h2>
+
+                <p>
+
+                    The project followed a structured Business Intelligence workflow from raw data acquisition through
+                    dashboard development and business insight generation.
+
+                </p>
+
+                <div class="row mt-4">
+
+                    <div class="col-lg-12">
+
+                        <div class="row text-center g-3">
+
+                            <div class="col">
+
+                                <div class="feature-card">
+
+                                    <h3>1</h3>
+
+                                    <strong>Import</strong>
+
+                                    <p class="mt-2">
+
+                                        Raw Dataset
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col">
+
+                                <div class="feature-card">
+
+                                    <h3>2</h3>
+
+                                    <strong>Clean</strong>
+
+                                    <p class="mt-2">
+
+                                        Power Query
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col">
+
+                                <div class="feature-card">
+
+                                    <h3>3</h3>
+
+                                    <strong>Transform</strong>
+
+                                    <p class="mt-2">
+
+                                        ETL Process
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col">
+
+                                <div class="feature-card">
+
+                                    <h3>4</h3>
+
+                                    <strong>Model</strong>
+
+                                    <p class="mt-2">
+
+                                        DAX Measures
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col">
+
+                                <div class="feature-card">
+
+                                    <h3>5</h3>
+
+                                    <strong>Visualise</strong>
+
+                                    <p class="mt-2">
+
+                                        Dashboard
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col">
+
+                                <div class="feature-card">
+
+                                    <h3>6</h3>
+
+                                    <strong>Analyse</strong>
+
+                                    <p class="mt-2">
+
+                                        Insights
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    RAW DATASET OVERVIEW
+    ========================================================== -->
+
+    <section class="section" id="etl">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/01_raw_dataset_preview.png" class="dashboard-image"
+                            alt="Raw Dataset">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Raw Healthcare Dataset
+
+                            </h3>
+
+                            <p>
+
+                                The project began with importing the raw healthcare dataset into Microsoft Power BI.
+                                Initial
+                                data profiling identified missing values, inconsistent department names, incomplete
+                                treatment costs and invalid age values requiring further cleansing before analysis.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Initial data inspection.</li>
+
+                                <li>Column validation.</li>
+
+                                <li>Data quality assessment.</li>
+
+                                <li>Missing value identification.</li>
+
+                                <li>Preparation for ETL.</li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ===== END OF PART 2 ===== -->
+    <!-- ==========================================================
+    POWER QUERY ETL
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Power Query ETL Process
+
+                </h2>
+
+                <p>
+
+                    Microsoft Power Query was used to perform the complete Extract, Transform and Load (ETL) process.
+                    This
+                    stage ensured that the healthcare dataset was accurate, consistent and ready for business
+                    intelligence
+                    reporting. Each transformation improved data quality before the dataset was loaded into the Power BI
+                    model.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    POWER QUERY INTERFACE
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/02_power_query_interface.png" class="dashboard-image"
+                            alt="Power Query">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Step 1 — Launch Power Query
+
+                            </h3>
+
+                            <p>
+
+                                The imported healthcare dataset was opened in Microsoft Power Query Editor, providing a
+                                dedicated environment for performing all ETL operations before loading the cleaned data
+                                into
+                                the Power BI model.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Review imported columns.</li>
+
+                                <li>Inspect data types.</li>
+
+                                <li>Identify quality issues.</li>
+
+                                <li>Prepare transformation workflow.</li>
+
+                            </ul>
+
+                            <div class="alert alert-info mt-3">
+
+                                <strong>Business Value:</strong>
+
+                                Power Query creates a repeatable data preparation process that can automatically refresh
+                                whenever new healthcare data becomes available.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    GENDER CLEANING
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Step 2 — Standardising Gender Values
+
+                </h2>
+
+                <div class="row g-4 mt-2">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/03_gender_cleaning Female.png" class="dashboard-image">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/03_gender_cleaning_Male.png" class="dashboard-image">
+
+                    </div>
+
+                </div>
+
+                <div class="content-box mt-4">
+
+                    <p>
+
+                        Patient gender values were reviewed and standardised to ensure consistent categorisation across
+                        the
+                        dataset. Cleaning categorical variables improves filtering, grouping and visualisation accuracy
+                        throughout the Power BI dashboard.
+
+                    </p>
+
+                    <ul>
+
+                        <li>Removed inconsistent text values.</li>
+
+                        <li>Standardised Male and Female categories.</li>
+
+                        <li>Improved slicer accuracy.</li>
+
+                        <li>Enhanced demographic reporting.</li>
+
+                    </ul>
+
+                    <div class="alert alert-info">
+
+                        <strong>Business Value:</strong>
+
+                        Consistent gender categories improve reporting reliability and ensure demographic analyses
+                        accurately reflect the underlying patient population.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    DEPARTMENT CLEANING
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Step 3 — Cleaning Department Names
+
+                </h2>
+
+                <div class="row g-4 mt-2">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/04_cardio_department_cleaning.png" class="dashboard-image">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/04_orthopedics_department_cleaning.png" class="dashboard-image">
+
+                    </div>
+
+                </div>
+
+                <div class="content-box mt-4">
+
+                    <p>
+
+                        Department names were standardised to eliminate inconsistent spellings and duplicate categories.
+                        Standardisation ensures departments appear correctly within Power BI visuals and prevents
+                        inaccurate
+                        aggregations.
+
+                    </p>
+
+                    <ul>
+
+                        <li>Corrected inconsistent department names.</li>
+
+                        <li>Improved grouping accuracy.</li>
+
+                        <li>Prevented duplicate categories.</li>
+
+                        <li>Enhanced departmental comparisons.</li>
+
+                    </ul>
+
+                    <div class="alert alert-info">
+
+                        <strong>Business Value:</strong>
+
+                        Clean department labels enable accurate operational reporting and fair comparison of
+                        departmental
+                        performance across the organisation.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    ADMISSION TYPE
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6 order-lg-2">
+
+                        <img src="Screenshots/Project6/05_ER_admission_type_cleaning.png" class="dashboard-image">
+
+                    </div>
+
+                    <div class="col-lg-6 order-lg-1">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Step 4 — Cleaning Admission Type
+
+                            </h3>
+
+                            <p>
+
+                                Admission type categories were standardised to remove inconsistencies between emergency,
+                                routine and elective admissions. This ensures accurate patient segmentation and
+                                meaningful
+                                dashboard filtering.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Validated admission categories.</li>
+
+                                <li>Removed inconsistent entries.</li>
+
+                                <li>Prepared for slicers.</li>
+
+                                <li>Improved reporting consistency.</li>
+
+                            </ul>
+
+                            <div class="alert alert-info mt-3">
+
+                                <strong>Business Value:</strong>
+
+                                Consistent admission classifications allow hospital managers to compare emergency and
+                                planned admissions more effectively.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    END OF PART 3
+    PART 4:
+    Missing Values
+    Median
+    Treatment Cost
+    Age Cleaning
+    Final Validation
+    ========================================================== -->
+
+    <!-- ==========================================================
+    SATISFACTION SCORE CLEANING
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Step 5 — Handling Missing Satisfaction Scores
+
+                </h2>
+
+                <p>
+
+                    Missing values within the <strong>Satisfaction Score</strong> column were addressed using mean
+                    imputation. The average satisfaction score was calculated and then used to replace missing values,
+                    ensuring the dataset remained complete while preserving the overall distribution of patient
+                    satisfaction.
+
+                </p>
+
+                <div class="row g-4 mt-3">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/06_Satisfaction_Score_mean_calculation.png"
+                            class="dashboard-image" alt="Mean Satisfaction Score">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/06b_Satisfaction_Score_replaced_null_values_with_mean.png"
+                            class="dashboard-image" alt="Replace Satisfaction Score">
+
+                    </div>
+
+                </div>
+
+                <div class="content-box mt-4">
+
+                    <ul>
+
+                        <li>Calculated the mean satisfaction score.</li>
+
+                        <li>Replaced missing values using the calculated mean.</li>
+
+                        <li>Maintained dataset completeness.</li>
+
+                        <li>Improved dashboard reliability.</li>
+
+                    </ul>
+
+                    <div class="alert alert-info mt-3">
+
+                        <strong>Business Value:</strong>
+
+                        Completing missing satisfaction scores allows healthcare managers to accurately monitor patient
+                        experience without excluding incomplete records from the analysis.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    TREATMENT COST CLEANING
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Step 6 — Replacing Missing Treatment Costs
+
+                </h2>
+
+                <p>
+
+                    Treatment Cost contained missing values that could distort financial reporting. Since treatment
+                    costs
+                    may contain extreme values, the <strong>median</strong> was chosen instead of the mean because it is
+                    less sensitive to outliers.
+
+                </p>
+
+                <div class="row g-4 mt-3">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/07_Treatment_Cost_Median_calculation.png" class="dashboard-image"
+                            alt="Median Treatment Cost">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/07b_Treatment_Cost_replaced_null_values_with__median .png"
+                            class="dashboard-image" alt="Replace Treatment Cost">
+
+                    </div>
+
+                </div>
+
+                <div class="content-box mt-4">
+
+                    <ul>
+
+                        <li>Calculated the median treatment cost.</li>
+
+                        <li>Replaced missing treatment costs.</li>
+
+                        <li>Reduced the influence of outliers.</li>
+
+                        <li>Improved financial reporting accuracy.</li>
+
+                    </ul>
+
+                    <div class="alert alert-info mt-3">
+
+                        <strong>Business Value:</strong>
+
+                        Using the median provides a more representative replacement value for healthcare costs,
+                        resulting in
+                        more reliable financial KPIs and expenditure analysis.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    AGE CLEANING
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Step 7 — Cleaning Patient Age
+
+                </h2>
+
+                <p>
+
+                    Patient age is an important demographic variable. Invalid ages and missing values were corrected
+                    before
+                    dashboard development to ensure accurate demographic analysis and age-based reporting.
+
+                </p>
+
+                <div class="row g-4 mt-3">
+
+                    <div class="col-lg-4">
+
+                        <img src="Screenshots/Project6/08_invalid_age_filtering.png" class="dashboard-image"
+                            alt="Invalid Age">
+
+                        <h5 class="text-center mt-3">
+
+                            Invalid Age Detection
+
+                        </h5>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <img src="Screenshots/Project6/08b_median_age_value.png" class="dashboard-image"
+                            alt="Median Age">
+
+                        <h5 class="text-center mt-3">
+
+                            Median Age Calculation
+
+                        </h5>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <img src="Screenshots/Project6/08c_age_null_value_replaced_with_median.png"
+                            class="dashboard-image" alt="Replace Age">
+
+                        <h5 class="text-center mt-3">
+
+                            Replacing Missing Ages
+
+                        </h5>
+
+                    </div>
+
+                </div>
+
+                <div class="content-box mt-4">
+
+                    <ul>
+
+                        <li>Filtered unrealistic patient ages.</li>
+
+                        <li>Calculated the median age.</li>
+
+                        <li>Replaced missing ages with the median.</li>
+
+                        <li>Improved demographic reporting quality.</li>
+
+                    </ul>
+
+                    <div class="alert alert-info mt-3">
+
+                        <strong>Business Value:</strong>
+
+                        Correct patient age information improves demographic analysis, patient segmentation and
+                        healthcare
+                        planning.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    FINAL DATA VALIDATION
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/09_keep_Treatment_ Cost_Gretaer_Than_0.png"
+                            class="dashboard-image" alt="Validation">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Step 8 — Final Data Validation
+
+                            </h3>
+
+                            <p>
+
+                                Before loading the cleaned dataset into the Power BI model, a final validation step
+                                ensured
+                                that only records with valid treatment costs greater than zero were retained. This
+                                prevents
+                                invalid financial records from influencing dashboard calculations.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Removed invalid financial records.</li>
+
+                                <li>Validated treatment cost values.</li>
+
+                                <li>Prepared the final analytical dataset.</li>
+
+                                <li>Loaded the clean dataset into Power BI.</li>
+
+                            </ul>
+
+                            <div class="alert alert-info mt-3">
+
+                                <strong>Business Value:</strong>
+
+                                Final validation improves data integrity and ensures that dashboard KPIs are based only
+                                on
+                                valid healthcare records.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    END OF PART 4
+    
+    NEXT:
+    DAX MEASURES
+    ========================================================== -->
+    <!-- ==========================================================
+    DAX MEASURES
+    ========================================================== -->
+
+    <section class="section" id="dax">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    DAX Measures & KPI Development
+
+                </h2>
+
+                <p>
+
+                    After completing the ETL process, custom <strong>Data Analysis Expressions (DAX)</strong> measures
+                    were
+                    created to calculate the Key Performance Indicators (KPIs) displayed throughout the dashboard. DAX
+                    enables dynamic calculations that automatically respond to filters, slicers and user interactions,
+                    making it one of the most powerful features of Microsoft Power BI.
+
+                </p>
+
+                <p>
+
+                    The measures developed in this project provide meaningful business metrics including total treatment
+                    costs, average treatment costs, patient volumes and patient satisfaction scores. These calculations
+                    form
+                    the foundation of the dashboard and allow healthcare managers to monitor organisational performance
+                    in
+                    real time.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    TOTAL TREATMENT COST
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/09a_DAX_Total_Treatment_Cost.png" class="dashboard-image"
+                            alt="Total Treatment Cost DAX">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                KPI 1 — Total Treatment Cost
+
+                            </h3>
+
+                            <p>
+
+                                This DAX measure calculates the total treatment expenditure across all patients within
+                                the
+                                healthcare dataset. It provides an overall financial overview of hospital activity and
+                                forms
+                                one of the primary executive KPIs displayed on the dashboard.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Uses the <strong>SUM()</strong> aggregation function.</li>
+
+                                <li>Calculates total expenditure.</li>
+
+                                <li>Updates dynamically when filters are applied.</li>
+
+                                <li>Supports departmental cost analysis.</li>
+
+                            </ul>
+
+                            <div class="alert alert-info mt-3">
+
+                                <strong>Business Value:</strong>
+
+                                Provides healthcare managers with an immediate overview of total hospital treatment
+                                expenditure, supporting budgeting and financial monitoring.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    AVERAGE TREATMENT COST
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6 order-lg-2">
+
+                        <img src="Screenshots/Project6/10_DAX_Average_Treatment_Cost.png" class="dashboard-image"
+                            alt="Average Treatment Cost">
+
+                    </div>
+
+                    <div class="col-lg-6 order-lg-1">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                KPI 2 — Average Treatment Cost
+
+                            </h3>
+
+                            <p>
+
+                                The average treatment cost measure calculates the mean cost per patient. This metric
+                                helps
+                                identify variations in treatment expenditure and enables comparisons between departments
+                                or
+                                patient groups.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Uses the <strong>AVERAGE()</strong> function.</li>
+
+                                <li>Calculates average patient cost.</li>
+
+                                <li>Supports comparative financial analysis.</li>
+
+                                <li>Responds to slicers and filters.</li>
+
+                            </ul>
+
+                            <div class="alert alert-info mt-3">
+
+                                <strong>Business Value:</strong>
+
+                                Average treatment cost enables hospitals to benchmark spending across departments and
+                                identify unusually high treatment expenses.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    PATIENT COUNT
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/11_COUJNT_Patient_ID.png" class="dashboard-image"
+                            alt="Patient Count">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                KPI 3 — Total Patients
+
+                            </h3>
+
+                            <p>
+
+                                This measure counts the total number of patient records contained within the cleaned
+                                dataset. Patient volume provides an important operational indicator that supports
+                                capacity
+                                planning and departmental workload analysis.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Counts all patient records.</li>
+
+                                <li>Provides operational workload information.</li>
+
+                                <li>Supports admission analysis.</li>
+
+                                <li>Updates dynamically with dashboard filters.</li>
+
+                            </ul>
+
+                            <div class="alert alert-info mt-3">
+
+                                <strong>Business Value:</strong>
+
+                                Patient count helps healthcare organisations understand service demand and resource
+                                utilisation across departments.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    SATISFACTION SCORE
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6 order-lg-2">
+
+                        <img src="Screenshots/Project6/12_AVERAGE_Satisfaction_Score.png" class="dashboard-image"
+                            alt="Average Satisfaction">
+
+                    </div>
+
+                    <div class="col-lg-6 order-lg-1">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                KPI 4 — Average Satisfaction Score
+
+                            </h3>
+
+                            <p>
+
+                                The satisfaction score measure calculates the average patient satisfaction rating. This
+                                KPI
+                                enables healthcare organisations to monitor service quality and evaluate patient
+                                experience
+                                across departments and demographic groups.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Calculates average satisfaction rating.</li>
+
+                                <li>Measures service quality.</li>
+
+                                <li>Supports patient experience analysis.</li>
+
+                                <li>Responds dynamically to slicers.</li>
+
+                            </ul>
+
+                            <div class="alert alert-info mt-3">
+
+                                <strong>Business Value:</strong>
+
+                                Monitoring patient satisfaction enables hospitals to identify areas requiring service
+                                improvement while maintaining high standards of patient care.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    SUMMARY
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Why DAX Measures Matter
+
+                </h2>
+
+                <p>
+
+                    Unlike static calculations in spreadsheets, DAX measures are evaluated dynamically whenever users
+                    interact with the dashboard. Selecting different departments, admission types, cities or patient
+                    demographics automatically recalculates every KPI, ensuring that decision-makers always view
+                    accurate
+                    and context-specific information. This flexibility transforms raw healthcare data into an
+                    interactive
+                    Business Intelligence solution capable of supporting operational, financial and strategic
+                    decision-making.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    END OF PART 5
+    
+    NEXT:
+    Interactive Dashboard & KPI Visualisations
+    ========================================================== -->
+
+    <!-- ==========================================================
+    DASHBOARD OVERVIEW
+    ========================================================== -->
+
+    <section class="section" id="dashboard">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Interactive Healthcare Dashboard
+
+                </h2>
+
+                <p>
+
+                    After completing the ETL process and creating the required DAX measures, the cleaned dataset was
+                    transformed into an interactive Business Intelligence dashboard using Microsoft Power BI. The
+                    dashboard
+                    provides healthcare managers with a single view of organisational performance through dynamic KPI
+                    cards,
+                    charts, maps and slicers.
+
+                </p>
+
+                <p>
+
+                    Users can filter the dashboard by department, city, admission type, gender and patient outcome,
+                    allowing
+                    decision-makers to investigate specific operational areas without modifying the underlying data
+                    model.
+
+                </p>
+
+                <img src="Screenshots/Project6/26_Powerbi Dashboard.png" class="dashboard-image mt-4"
+                    alt="Healthcare Dashboard">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    KPI CARDS
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Executive KPI Summary
+
+                </h2>
+
+                <div class="row g-4 mt-3">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/13a_KPI_Card_Total_Treatmemt_Cost.png" class="dashboard-image">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Total Treatment Cost
+
+                            </h3>
+
+                            <p>
+
+                                The dashboard reports a total treatment expenditure of approximately
+                                <strong>£4.9M</strong>, representing the cumulative cost of treating all patients
+                                included within the dataset.
+
+                            </p>
+
+                            <p>
+
+                                This KPI provides executives with an immediate financial overview and acts as a
+                                benchmark
+                                when comparing expenditure across departments or monitoring future reporting periods.
+
+                            </p>
+
+                            <div class="alert alert-info">
+
+                                <strong>Business Insight:</strong>
+
+                                A relatively high total expenditure suggests significant resource utilisation across
+                                hospital departments. Decision-makers should investigate which services contribute most
+                                to
+                                overall spending.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-5">
+
+                <div class="row g-4">
+
+                    <div class="col-lg-6 order-lg-2">
+
+                        <img src="Screenshots/Project6/13b_KPI_Card_Average_Treatmemt_Cost.png" class="dashboard-image">
+
+                    </div>
+
+                    <div class="col-lg-6 order-lg-1">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Average Treatment Cost
+
+                            </h3>
+
+                            <p>
+
+                                The average treatment cost is approximately <strong>£5.03k per patient</strong>. This
+                                measure provides insight into the typical cost associated with delivering healthcare
+                                services.
+
+                            </p>
+
+                            <p>
+
+                                Comparing this value between departments allows managers to identify unusually expensive
+                                treatment pathways and opportunities for improving operational efficiency.
+
+                            </p>
+
+                            <div class="alert alert-info">
+
+                                <strong>Business Insight:</strong>
+
+                                Departments with treatment costs significantly above the organisational average should
+                                be
+                                reviewed to determine whether higher expenditure reflects greater clinical complexity or
+                                operational inefficiencies.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-5">
+
+                <div class="row g-4">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/13c_KPI_Card_Total_Patients.png" class="dashboard-image">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Patient Volume
+
+                            </h3>
+
+                            <p>
+
+                                The dashboard reports a total of <strong>974 patients</strong>, representing the number
+                                of patient records included
+                                in the healthcare dataset after the ETL process. This KPI provides an immediate
+                                indication of hospital activity and
+                                forms the basis for analysing departmental workload, treatment costs and patient
+                                outcomes.
+
+                            </p>
+
+
+                            <div class="alert alert-info">
+
+                                <strong>Business Insight:</strong>
+
+                                Monitoring patient volume alongside financial and operational KPIs enables healthcare
+                                managers to understand demand for
+                                services and evaluate whether available resources are sufficient to meet patient needs.
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-5">
+
+                <div class="row g-4">
+
+                    <div class="col-lg-6 order-lg-2">
+
+                        <img src="Screenshots/Project6/13d_KPI_Average_Satisfaction_Score.png" class="dashboard-image">
+
+                    </div>
+
+                    <div class="col-lg-6 order-lg-1">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Average Satisfaction Score
+
+                            </h3>
+
+                            <p>
+
+                                The average patient satisfaction score is approximately <strong>5.35 out of 10</strong>,
+                                indicating moderate levels of patient satisfaction across the healthcare organisation.
+
+                            </p>
+
+                            <p>
+
+                                Although satisfaction remains relatively stable, the score highlights opportunities for
+                                improving patient experience and service quality.
+
+                            </p>
+
+                            <div class="alert alert-info">
+
+                                <strong>Business Insight:</strong>
+
+                                Improving patient communication, reducing waiting times and enhancing post-treatment
+                                support
+                                may contribute to higher satisfaction scores in future reporting periods.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    DEPARTMENT ANALYSIS
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Department Performance Analysis
+
+                </h2>
+
+                <div class="row g-4 mt-3">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/14_Clustered_Bar_Chart_Department_by_Patient_ID.png"
+                            class="dashboard-image">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/15_Column_Chart_Treatement_Cost_by_Department.png"
+                            class="dashboard-image">
+
+                    </div>
+
+                </div>
+
+                <div class="content-box mt-4">
+
+                    <h3>
+
+                        Operational Analysis
+
+                    </h3>
+
+                    <p>
+
+                        Comparing patient volumes with departmental treatment costs provides valuable insight into
+                        hospital
+                        resource utilisation. While some departments manage a large number of patients, others generate
+                        substantially higher treatment costs despite treating fewer patients.
+
+                    </p>
+
+                    <ul>
+
+                        <li>Cardiology records the highest treatment expenditure.</li>
+
+                        <li>Orthopaedics follows closely behind.</li>
+
+                        <li>Departments differ considerably in average treatment costs.</li>
+
+                        <li>Higher patient numbers do not always correspond to higher expenditure.</li>
+
+                    </ul>
+
+                    <div class="alert alert-info">
+
+                        <strong>Business Insight:</strong>
+
+                        Hospital management should compare cost per patient across departments rather than focusing
+                        solely
+                        on total expenditure. Departments with disproportionately high costs may require operational
+                        review
+                        or resource optimisation.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    END OF PART 6
+    
+    NEXT:
+    
+    Scatter Plot
+    
+    Patient Trend
+    
+    Admission Analysis
+    
+    Treemap
+    
+    Map
+    
+    Interactive Filters
+    
+    Business Insights
+    
+    ========================================================== -->
+
+    <!-- ==========================================================
+    PATIENT ADMISSION TREND ANALYSIS
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Patient Admission Trend Analysis
+
+                </h2>
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/16_line_chart_monthly_admission_trend.png"
+                            class="dashboard-image" alt="Patient Admission Trend">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Monthly Patient Admissions
+
+                            </h3>
+
+                            <p>
+
+                                The line chart visualises patient admissions over time, enabling healthcare managers to
+                                monitor changes in patient demand across different months. Trend analysis helps identify
+                                periods of increased activity and supports proactive resource planning.
+
+                            </p>
+
+                            <p>
+
+                                The dashboard shows fluctuations in patient admissions throughout the reporting period,
+                                indicating that demand for healthcare services is not constant. Recognising these trends
+                                allows hospitals to better allocate staff, beds and medical resources during peak
+                                periods.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Tracks patient demand over time.</li>
+
+                                <li>Highlights seasonal or monthly fluctuations.</li>
+
+                                <li>Supports workforce and resource planning.</li>
+
+                                <li>Identifies periods of increased operational pressure.</li>
+
+                            </ul>
+
+                            <div class="alert alert-info mt-3">
+
+                                <strong>Business Insight:</strong>
+
+                                Monitoring patient admission trends enables healthcare managers to anticipate future
+                                demand
+                                and allocate resources more effectively. Peak admission periods should be considered
+                                when
+                                planning staffing levels and departmental capacity.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    AGE VS TREATMENT COST
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6 order-lg-2">
+
+                        <img src="Screenshots/Project6/17_Scatter_Plot_Showing_Age_vs_Treatment_Cost.png"
+                            class="dashboard-image" alt="Age vs Treatment Cost">
+
+                    </div>
+
+                    <div class="col-lg-6 order-lg-1">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Relationship Between Age and Treatment Cost
+
+                            </h3>
+
+                            <p>
+
+                                The scatter plot explores the relationship between patient age and treatment cost. Each
+                                point represents an individual patient, allowing analysts to identify clusters, unusual
+                                observations and potential relationships between demographic characteristics and
+                                healthcare
+                                expenditure.
+
+                            </p>
+
+                            <p>
+
+                                The visual indicates that treatment costs vary considerably across all age groups. While
+                                older patients frequently incur higher treatment costs, there is no perfect linear
+                                relationship, suggesting that clinical complexity and treatment type also contribute
+                                significantly to expenditure.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Identifies potential cost outliers.</li>
+
+                                <li>Supports demographic analysis.</li>
+
+                                <li>Highlights variability in healthcare spending.</li>
+
+                                <li>Assists with healthcare planning.</li>
+
+                            </ul>
+
+                            <div class="alert alert-info mt-3">
+
+                                <strong>Business Insight:</strong>
+
+                                Age alone does not explain treatment expenditure. Healthcare providers should combine
+                                demographic analysis with diagnosis and department-level information to better
+                                understand
+                                the drivers of healthcare costs.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    ADMISSION TYPE ANALYSIS
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Admission Type Distribution
+
+                </h2>
+
+                <div class="row g-4 mt-3">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/19_Admission_Tyoe_Distribution.png" class="dashboard-image"
+                            alt="Admission Type">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/20_Treemap_Treatment_Cost_by_Department.png"
+                            class="dashboard-image" alt="Treemap">
+
+                    </div>
+
+                </div>
+
+                <div class="content-box mt-4">
+
+                    <h3>
+
+                        Operational Distribution of Hospital Activity
+
+                    </h3>
+
+                    <p>
+
+                        The pie chart summarises the proportion of patients admitted through different admission
+                        pathways,
+                        while the treemap highlights how treatment costs are distributed across hospital departments.
+                        Together, these visuals provide both operational and financial perspectives of hospital
+                        performance.
+
+                    </p>
+
+                    <ul>
+
+                        <li>Identifies the dominant admission type.</li>
+
+                        <li>Compares departmental expenditure.</li>
+
+                        <li>Highlights resource-intensive services.</li>
+
+                        <li>Supports operational planning.</li>
+
+                    </ul>
+
+                    <div class="alert alert-info mt-3">
+
+                        <strong>Business Insight:</strong>
+
+                        Comparing admission patterns with departmental expenditure enables healthcare organisations to
+                        determine whether financial resources are aligned with patient demand and operational
+                        priorities.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    GEOGRAPHICAL ANALYSIS
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <div class="row align-items-center g-4">
+
+                    <div class="col-lg-6">
+
+                        <img src="Screenshots/Project6/18_Patient_by_City_Map.png" class="dashboard-image"
+                            alt="Patient Map">
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="content-box">
+
+                            <h3>
+
+                                Geographical Distribution of Patients
+
+                            </h3>
+
+                            <p>
+
+                                The geographical map illustrates the spatial distribution of patients across different
+                                cities. Geographic analysis helps healthcare organisations understand where demand
+                                originates and identify regions requiring increased healthcare provision.
+
+                            </p>
+
+                            <p>
+
+                                Visualising patient locations enables healthcare managers to recognise regional demand
+                                patterns and supports strategic planning for future healthcare services.
+
+                            </p>
+
+                            <ul>
+
+                                <li>Visualises patient distribution.</li>
+
+                                <li>Supports regional healthcare planning.</li>
+
+                                <li>Identifies high-demand locations.</li>
+
+                                <li>Assists service expansion decisions.</li>
+
+                            </ul>
+
+                            <div class="alert alert-info mt-3">
+
+                                <strong>Business Insight:</strong>
+
+                                Geographical analysis enables hospitals to identify underserved areas and optimise
+                                service
+                                delivery based on patient demand across different locations.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    END OF PART 6
+    
+    NEXT:
+    Interactive Filters
+    Final Dashboard
+    Key Insights
+    Business Recommendations
+    ========================================================== -->
+
+    <!-- ==========================================================
+    FINAL INTERACTIVE DASHBOARD
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Final Interactive Healthcare Dashboard
+
+                </h2>
+
+                <p>
+
+                    The final Power BI dashboard integrates the cleaned dataset, DAX measures and interactive
+                    visualisations
+                    into a single analytical solution. Users can dynamically explore healthcare performance using
+                    filters
+                    and slicers while monitoring key operational and financial KPIs. The dashboard provides a
+                    consolidated
+                    view of patient activity, treatment expenditure, departmental performance and service quality,
+                    enabling
+                    healthcare managers to make informed, data-driven decisions.
+
+                </p>
+
+                <img src="Screenshots/Project6/26_Powerbi Dashboard.png" class="dashboard-image mt-4"
+                    alt="Healthcare Dashboard">
+
+                <div class="alert alert-info mt-4">
+
+                    <strong>Dashboard Summary:</strong>
+
+                    The completed dashboard transforms raw healthcare data into an interactive Business Intelligence
+                    solution that supports strategic planning, operational monitoring and evidence-based
+                    decision-making.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    KEY BUSINESS INSIGHTS
+    ========================================================== -->
+
+    <section class="section" id="insights">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Key Business Insights
+
+                </h2>
+
+                <p>
+
+                    The completed dashboard revealed several operational and financial insights that would support
+                    healthcare managers in monitoring organisational performance and identifying opportunities for
+                    improvement.
+
+                </p>
+
+                <div class="row g-4 mt-4">
+
+                    <div class="col-lg-6">
+
+                        <div class="feature-card text-start">
+
+                            <h4>
+
+                                📊 Operational Performance
+
+                            </h4>
+
+                            <ul>
+
+                                <li>The dashboard contains <strong>974 patient records</strong>, providing a
+                                    comprehensive
+                                    overview of healthcare activity.</li>
+
+                                <li>Patient admissions fluctuate over time, highlighting the importance of workforce and
+                                    resource planning.</li>
+
+                                <li>Interactive filtering enables rapid investigation of departmental and demographic
+                                    performance.</li>
+
+                                <li>Admission patterns provide valuable evidence for future capacity planning.</li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="feature-card text-start">
+
+                            <h4>
+
+                                💰 Financial Performance
+
+                            </h4>
+
+                            <ul>
+
+                                <li>Total treatment expenditure provides a high-level indicator of organisational
+                                    healthcare
+                                    costs.</li>
+
+                                <li>Average treatment cost enables benchmarking across departments and patient groups.
+                                </li>
+
+                                <li>Treatment expenditure varies considerably between departments, indicating
+                                    differences in
+                                    clinical complexity and resource utilisation.</li>
+
+                                <li>Financial KPIs update dynamically as dashboard filters are applied.</li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="feature-card text-start">
+
+                            <h4>
+
+                                😊 Patient Experience
+
+                            </h4>
+
+                            <ul>
+
+                                <li>Patient satisfaction is monitored through an average satisfaction KPI.</li>
+
+                                <li>Satisfaction trends can be analysed across departments and admission types.</li>
+
+                                <li>Combining operational and satisfaction metrics supports continuous service
+                                    improvement.
+                                </li>
+
+                                <li>Interactive reporting enables managers to identify areas requiring further
+                                    investigation.</li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="feature-card text-start">
+
+                            <h4>
+
+                                🌍 Strategic Planning
+
+                            </h4>
+
+                            <ul>
+
+                                <li>Geographical mapping identifies areas generating the greatest healthcare demand.
+                                </li>
+
+                                <li>Scatter analysis highlights variation in treatment costs across age groups.</li>
+
+                                <li>Departmental comparisons support evidence-based resource allocation.</li>
+
+                                <li>The dashboard enables informed operational and strategic decision-making.</li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    BUSINESS RECOMMENDATIONS
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Business Recommendations
+
+                </h2>
+
+                <p>
+
+                    Based on the dashboard findings, several recommendations can be made to improve operational
+                    efficiency,
+                    financial management and patient care.
+
+                </p>
+
+                <div class="row g-4 mt-4">
+
+                    <div class="col-lg-4">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-cash-stack"></i>
+
+                            <h4>
+
+                                Review High-Cost Departments
+
+                            </h4>
+
+                            <p>
+
+                                Investigate departments with the highest treatment expenditure to determine whether
+                                increased costs reflect clinical complexity or operational inefficiencies.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-calendar2-week"></i>
+
+                            <h4>
+
+                                Improve Resource Planning
+
+                            </h4>
+
+                            <p>
+
+                                Use admission trend analysis to forecast future patient demand and optimise staffing
+                                levels
+                                during peak periods.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-heart-pulse-fill"></i>
+
+                            <h4>
+
+                                Enhance Patient Experience
+
+                            </h4>
+
+                            <p>
+
+                                Monitor satisfaction scores alongside operational KPIs to identify departments requiring
+                                service improvement initiatives.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-geo-alt-fill"></i>
+
+                            <h4>
+
+                                Support Regional Planning
+
+                            </h4>
+
+                            <p>
+
+                                Use geographical insights to evaluate whether healthcare resources are appropriately
+                                distributed across patient locations.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-graph-up-arrow"></i>
+
+                            <h4>
+
+                                Expand Predictive Analytics
+
+                            </h4>
+
+                            <p>
+
+                                Future dashboards could incorporate forecasting models to predict patient admissions,
+                                treatment costs and departmental demand.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-arrow-repeat"></i>
+
+                            <h4>
+
+                                Automate Data Refresh
+
+                            </h4>
+
+                            <p>
+
+                                Connecting the dashboard to a live data source would enable automatic updates and
+                                provide
+                                real-time healthcare performance monitoring.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    SKILLS DEMONSTRATED
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card">
+
+                <h2 class="section-title">
+
+                    Skills Demonstrated
+
+                </h2>
+
+                <div class="row text-center g-4 mt-3">
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-funnel-fill"></i>
+
+                            <h5>ETL Development</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-database-fill"></i>
+
+                            <h5>Data Cleaning</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-calculator-fill"></i>
+
+                            <h5>DAX Measures</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-bar-chart-fill"></i>
+
+                            <h5>Power BI Reporting</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-pie-chart-fill"></i>
+
+                            <h5>Data Visualisation</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-clipboard-data-fill"></i>
+
+                            <h5>KPI Analysis</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-lightbulb-fill"></i>
+
+                            <h5>Business Intelligence</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+
+                        <div class="feature-card">
+
+                            <i class="bi bi-people-fill"></i>
+
+                            <h5>Decision Support</h5>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    FOOTER
+    ========================================================== -->
+
+    <!-- ==========================================================
+    PROJECT RESOURCES
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="section-card text-center">
+
+                <h2 class="section-title">
+
+                    Project Resources
+
+                </h2>
+
+                <p>
+
+                    Download the project resources used throughout this Business Intelligence project, including the
+                    original raw dataset, the cleaned dataset prepared during the ETL process, and the complete Power BI
+                    dashboard file.
+
+                </p>
+
+                <div class="row g-4 mt-4">
+
+                    <div class="col-lg-4">
+
+                        <a href="datasets and files/project6_hospital_powerbi_week15_messy.csv"
+                            class="btn btn-main w-100 py-3">
+
+                            <i class="bi bi-file-earmark-excel-fill"></i><br><br>
+
+                            <strong>Download Raw Dataset</strong>
+
+                            <br>
+
+                            <small>Original messy healthcare data</small>
+
+                        </a>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <a href="datasets and files/project6_hospital_powerbi_week15_Cleaned_Dataset.csv"
+                            class="btn btn-main w-100 py-3">
+
+                            <i class="bi bi-file-earmark-check-fill"></i><br><br>
+
+                            <strong>Download Cleaned Dataset</strong>
+
+                            <br>
+
+                            <small>ETL output used for Power BI</small>
+
+                        </a>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <a href="datasets and files/Project 6 Dashvboard 10.07.26_V2.pbix"
+                            class="btn btn-main w-100 py-3">
+
+                            <i class="bi bi-bar-chart-fill"></i><br><br>
+
+                            <strong>Download Power BI File</strong>
+
+                            <br>
+
+                            <small>Interactive dashboard (.pbix)</small>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================================
+    FOOTER
+    ========================================================== -->
+
+    <footer class="py-5">
+
+        <div class="container text-center">
+
+            <a href="../index.html" class="btn btn-outline-main">
+
+                <i class="bi bi-arrow-left-circle-fill"></i>
+
+                Back to Portfolio
+
+            </a>
+
+            <p class="mt-4 text-secondary">
+
+                © 2026 Vivian Edema-Oyemike • Data Analytics Portfolio
+
+            </p>
+
+        </div>
+
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
+
+</html>
